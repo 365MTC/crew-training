@@ -2360,16 +2360,41 @@ if (currentUser) document.getElementById('orderQuerySection').style.display = 'b
 /* ═══ PWA Install ═══ */
 let deferredPrompt;
 const installBanner = document.getElementById('installBanner');
+// Detect if browser supports PWA install
+const isInstallable = 'BeforeInstallPromptEvent' in window || /Chrome|Edge|SamsungBrowser/i.test(navigator.userAgent);
+// Always show banner (unless dismissed), show appropriate buttons
+if (!sessionStorage.getItem('installDismissed')) {
+  installBanner.style.display = 'flex';
+  if (isInstallable) {
+    document.getElementById('installAppBtn').style.display = 'block';
+  } else {
+    // WeChat etc: show "open in browser" button instead
+    const openBtn = document.getElementById('installAppBtn');
+    openBtn.style.display = 'block';
+    openBtn.textContent = '在浏览器打开';
+    openBtn.style.background = '#1890ff';
+  }
+}
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
-  if (!sessionStorage.getItem('installDismissed')) {
-    installBanner.style.display = 'flex';
-    document.getElementById('installAppBtn').style.display = 'block';
+  const openBtn = document.getElementById('installAppBtn');
+  if (openBtn) {
+    openBtn.textContent = '立即安装';
+    openBtn.style.background = '#07C160';
   }
 });
 function installApp() {
-  if (!deferredPrompt) { toast('请用手机浏览器打开本页，再点击安装', 'success'); return; }
+  if (!deferredPrompt) {
+    // No install prompt support: guide user to open in system browser
+    const ua = navigator.userAgent.toLowerCase();
+    if (/micromessenger/i.test(ua)) {
+      toast('请点击右上角 ··· ，选择"在浏览器打开"后安装', 'success');
+    } else {
+      toast('请用手机系统浏览器打开本页，再点击安装', 'success');
+    }
+    return;
+  }
   deferredPrompt.prompt();
   deferredPrompt.userChoice.then(choice => {
     if (choice.outcome === 'accepted') toast('正在安装 App... ✨', 'success');
