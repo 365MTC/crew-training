@@ -613,12 +613,25 @@
       <div style="font-size:11px;color:var(--slate)">添加到手机桌面，更便捷使用</div>
     </div>
   </div>
-  <div style="display:flex;gap:8px">
+  <div id="installBannerBtns" style="display:flex;gap:8px;flex-shrink:0">
     <button onclick="hideInstallBtn()" style="background:none;border:1px solid rgba(200,169,81,0.25);border-radius:8px;padding:8px 14px;color:var(--slate);font-size:13px;cursor:pointer">暂不需要</button>
     <button id="installAppBtn" onclick="installApp()" style="display:none;background:#07C160;border:none;border-radius:8px;padding:8px 16px;color:#fff;font-size:13px;font-weight:600;cursor:pointer">立即安装</button>
     <button onclick="hideInstallBtn()" style="background:none;border:1px solid rgba(200,169,81,0.25);border-radius:8px;padding:8px 14px;color:var(--slate);font-size:13px;cursor:pointer;display:none" id="installDismissBtn">暂不需要</button>
   </div>
 </div>
+
+<style>
+/* Mobile: shrink banner buttons on small screens */
+@media (max-width: 420px) {
+  #installBanner {
+    padding: 12px 14px;
+  }
+  #installBannerBtns button {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+  }
+}
+</style>
 
 <!-- WeChat Login Modal -->
 <div class="wechat-modal-overlay" id="wechatModal">
