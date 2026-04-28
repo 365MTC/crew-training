@@ -405,7 +405,7 @@
     .recruit-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px}
     .recruit-row-label{color:var(--slate);display:flex;align-items:center;gap:4px}
     .recruit-row-value{color:var(--ivory);font-weight:500;font-family:'JetBrains Mono',monospace}
-    .recruit-salary{color:var(--brass) !important;font-size:15px !important;font-weight:700 !important}
+    .recruit-voyage{color:var(--brass) !important;font-size:15px !important;font-weight:700 !important}
     .recruit-apply-btn{width:100%;margin-top:16px;padding:11px;background:var(--brass);border:none;border-radius:20px;color:var(--navy-deep);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px}
     .recruit-apply-btn:hover{background:var(--brass-light);transform:scale(1.02)}
     .recruit-apply-btn:active{transform:scale(0.98)}
@@ -1548,7 +1548,7 @@ const DEFAULT_RECRUITS = [
     shipName: '海盛号 MV HAISHENG',
     shipType: '散货船',
     route: '远洋航线 / 东南亚',
-    salary: '15000-22000',
+    voyage: '上船日期：5月15日 | 下船日期：11月20日',
     duration: '6个月',
     urgent: true,
     desc: '诚聘有经验船员，需持有有效适任证书，航线稳定，福利完善。',
@@ -1559,7 +1559,7 @@ const DEFAULT_RECRUITS = [
     shipName: '华通号 MV HUATONG',
     shipType: '集装箱船',
     route: '近洋航线 / 日韩线',
-    salary: '12000-18000',
+    voyage: '上船日期：6月1日 | 下船日期：10月10日',
     duration: '4个月',
     urgent: false,
     desc: '日韩固定航线，港口条件好，船舶设备先进，招募多个岗位。',
@@ -1570,7 +1570,7 @@ const DEFAULT_RECRUITS = [
     shipName: '蓝海号 MV LANHAI',
     shipType: '油轮',
     route: '沿海 / 化工品运输',
-    salary: '18000-25000',
+    voyage: '上船日期：5月底 | 下船日期：11月15日',
     duration: '6个月',
     urgent: false,
     desc: '高薪油轮岗位，有毒化物操作证书优先，提供专业安全培训。',
@@ -1669,8 +1669,8 @@ function renderRecruits() {
           <span class="recruit-row-value">${r.duration}</span>
         </div>
         <div class="recruit-row">
-          <span class="recruit-row-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>薪资</span>
-          <span class="recruit-row-value recruit-salary">¥${r.salary}</span>
+          <span class="recruit-row-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>船期信息</span>
+          <span class="recruit-row-value recruit-voyage">${r.voyage}</span>
         </div>
       </div>
       <div class="card-footer" style="padding:0 20px 16px">
@@ -1813,7 +1813,7 @@ function renderAdminRecruitList() {
         <div class="admin-recruit-name">${r.shipName} <span style="font-size:11px;color:var(--slate)">(${r.shipType})</span></div>
         <div class="admin-recruit-meta">
           <span>${r.route}</span>
-          <span style="color:var(--brass)">¥${r.salary}</span>
+          <span style="color:var(--brass)">${r.voyage}</span>
           <span>${r.duration}</span>
           ${r.urgent ? '<span style="color:#E74C3C">紧急</span>' : ''}
         </div>
@@ -1832,7 +1832,7 @@ function showRecruitAddForm() {
   document.getElementById('rfShipName').value = '';
   document.getElementById('rfShipType').value = '';
   document.getElementById('rfRoute').value = '';
-  document.getElementById('rfSalary').value = '';
+  document.getElementById('rfVoyage').value = '';
   document.getElementById('rfDuration').value = '';
   document.getElementById('rfUrgent').checked = false;
   document.getElementById('rfDesc').value = '';
@@ -1848,7 +1848,7 @@ function showRecruitEditForm(id) {
   document.getElementById('rfShipName').value = r.shipName;
   document.getElementById('rfShipType').value = r.shipType;
   document.getElementById('rfRoute').value = r.route;
-  document.getElementById('rfSalary').value = r.salary;
+  document.getElementById('rfVoyage').value = r.voyage;
   document.getElementById('rfDuration').value = r.duration;
   document.getElementById('rfUrgent').checked = !!r.urgent;
   document.getElementById('rfDesc').value = r.desc;
@@ -1860,13 +1860,13 @@ function saveRecruit() {
   const shipName = document.getElementById('rfShipName').value.trim();
   const shipType = document.getElementById('rfShipType').value.trim();
   const route = document.getElementById('rfRoute').value.trim();
-  const salary = document.getElementById('rfSalary').value.trim();
+  const voyage = document.getElementById('rfVoyage').value.trim();
   const duration = document.getElementById('rfDuration').value.trim();
   const urgent = document.getElementById('rfUrgent').checked;
   const desc = document.getElementById('rfDesc').value.trim();
   const requirement = document.getElementById('rfRequirement').value.trim();
 
-  if (!shipName || !shipType || !route || !salary || !duration || !desc) {
+  if (!shipName || !shipType || !route || !voyage || !duration || !desc) {
     toast('请填写所有必填项', 'error');
     return;
   }
@@ -1874,12 +1874,12 @@ function saveRecruit() {
   if (editingRecruitId !== null) {
     const idx = RECRUITS.findIndex(x => x.id === editingRecruitId);
     if (idx >= 0) {
-      RECRUITS[idx] = { ...RECRUITS[idx], shipName, shipType, route, salary, duration, urgent, desc, requirement };
+      RECRUITS[idx] = { ...RECRUITS[idx], shipName, shipType, route, voyage, duration, urgent, desc, requirement };
     }
     toast('招募职位已更新', 'success');
   } else {
     const newId = RECRUITS.length ? Math.max(...RECRUITS.map(r => r.id)) + 1 : 1;
-    RECRUITS.push({ id: newId, shipName, shipType, route, salary, duration, urgent, desc, requirement });
+    RECRUITS.push({ id: newId, shipName, shipType, route, voyage, duration, urgent, desc, requirement });
     toast('招募职位已添加', 'success');
   }
 
