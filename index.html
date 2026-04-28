@@ -2073,7 +2073,7 @@ function approveSubmission(id) {
     requirement: sub.requirement
   });
   localStorage.setItem('recruit_submissions', JSON.stringify(subs));
-  localStorage.setItem('recruitments', JSON.stringify(RECRUITS));
+  localStorage.setItem(RECRUIT_KEY, JSON.stringify(RECRUITS));
   renderAdminSubmissions();
   renderRecruitList();
   toast('已通过！招募信息已发布', 'success');
