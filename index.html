@@ -362,6 +362,16 @@
     .pay-modal-btn.primary:hover{background:#06AD56}
     .pay-modal-btn.secondary{background:transparent;border:1px solid rgba(200,169,81,0.3);color:var(--slate)}
     .pay-modal-btn.secondary:hover{border-color:var(--brass);color:var(--brass)}
+    
+    /* Global Settings */
+    .settings-header{margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(200,169,81,0.2)}
+    .settings-title{font-size:20px;font-weight:700;color:var(--ivory);margin-bottom:6px}
+    .settings-desc{font-size:13px;color:var(--slate)}
+    .settings-form{max-width:600px}
+    .settings-preview{margin-top:20px;padding:16px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);text-align:center}
+    .settings-preview-label{font-size:12px;color:var(--slate);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px}
+    .settings-preview-img{width:200px;height:200px;margin:0 auto;background:#fff;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
+    .settings-preview-img img{max-width:100%;max-height:100%;object-fit:contain}
   </style>
 </head>
 <body>
@@ -558,6 +568,7 @@
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="courses" onclick="switchAdminTab('courses')">📚 课程管理</button>
         <button class="admin-tab" data-tab="orders" onclick="switchAdminTab('orders')">📋 订单管理</button>
+        <button class="admin-tab" data-tab="settings" onclick="switchAdminTab('settings')">⚙️ 全局设置</button>
       </div>
 
       <!-- ─── Course Management Views ─── -->
@@ -612,6 +623,26 @@
         </div>
         <div class="order-detail-card" id="orderDetailCard"></div>
         <div class="order-payment-form" id="orderPaymentForm"></div>
+      </div>
+      
+      <!-- ─── Global Settings View ─── -->
+      <div id="settingsView" style="display:none">
+        <div class="settings-header">
+          <div class="settings-title">全局收款码设置</div>
+          <div class="settings-desc">设置后，所有课程报名成功都将显示此收款码</div>
+        </div>
+        <div class="settings-form">
+          <div class="admin-form-group full">
+            <label class="admin-label">微信收款码图片链接</label>
+            <input class="admin-input" type="text" id="globalPayQrCode" placeholder="如：https://i.imgur.com/xxxxx.jpg" />
+            <div style="font-size:11px;color:var(--slate);margin-top:8px">提示：将收款码图片上传到图床（如 <a href="https://sm.ms" target="_blank" style="color:var(--gold)">sm.ms</a>），获取图片链接后填入此处</div>
+          </div>
+          <div class="settings-preview" id="settingsPreview" style="display:none">
+            <div class="settings-preview-label">预览</div>
+            <div class="settings-preview-img"><img id="settingsPreviewImg" src="" alt="收款码预览" /></div>
+          </div>
+          <button class="admin-save-btn" onclick="saveGlobalSettings()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>保存设置</button>
+        </div>
       </div>
     </div>
   </div>
@@ -805,10 +836,13 @@ function showPayModal(course, ticketCode) {
   document.getElementById('payOrderId').textContent = ticketCode;
   
   const qrWrap = document.getElementById('payQrWrap');
-  const placeholder = document.getElementById('payQrPlaceholder');
   
-  if (course.payQrCode) {
-    qrWrap.innerHTML = `<img src="${course.payQrCode}" alt="收款码" onerror="this.parentElement.innerHTML='<div class=\\'pay-qr-placeholder\\'>💬</div>'" />`;
+  // Priority: course-specific QR code > global QR code > placeholder
+  const globalSettings = getGlobalSettings();
+  const qrCode = course.payQrCode || globalSettings.payQrCode || '';
+  
+  if (qrCode) {
+    qrWrap.innerHTML = `<img src="${qrCode}" alt="收款码" onerror="this.parentElement.innerHTML='<div class=\\'pay-qr-placeholder\\'>💬</div>'" />`;
   } else {
     qrWrap.innerHTML = '<div class="pay-qr-placeholder">💬</div>';
   }
@@ -990,8 +1024,10 @@ function switchAdminTab(tab) {
   document.getElementById('adminConfirmView').classList.toggle('show', tab === 'courses' && document.getElementById('adminConfirmView').classList.contains('show'));
   document.getElementById('orderListView').style.display = tab === 'orders' ? 'block' : 'none';
   document.getElementById('orderDetailView').style.display = 'none';
+  document.getElementById('settingsView').style.display = tab === 'settings' ? 'block' : 'none';
   if (tab === 'orders') renderOrders();
   if (tab === 'courses') renderAdminList();
+  if (tab === 'settings') loadGlobalSettings();
 }
 
 function loadOrders() {
@@ -999,6 +1035,52 @@ function loadOrders() {
   catch { return []; }
 }
 function saveOrders(orders) { localStorage.setItem('crew_training_records', JSON.stringify(orders)); }
+
+/* ═══ Global Settings ═══ */
+const GLOBAL_SETTINGS_KEY = 'crew_training_settings';
+function getGlobalSettings() {
+  try { return JSON.parse(localStorage.getItem(GLOBAL_SETTINGS_KEY) || '{}'); }
+  catch { return {}; }
+}
+function saveGlobalSettingsData(data) {
+  localStorage.setItem(GLOBAL_SETTINGS_KEY, JSON.stringify(data));
+}
+
+function loadGlobalSettings() {
+  const settings = getGlobalSettings();
+  const input = document.getElementById('globalPayQrCode');
+  if (input) {
+    input.value = settings.payQrCode || '';
+    updateSettingsPreview(settings.payQrCode);
+  }
+}
+
+function updateSettingsPreview(url) {
+  const preview = document.getElementById('settingsPreview');
+  const img = document.getElementById('settingsPreviewImg');
+  if (url && url.trim()) {
+    preview.style.display = 'block';
+    img.src = url.trim();
+    img.onerror = () => { preview.style.display = 'none'; };
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function saveGlobalSettings() {
+  const input = document.getElementById('globalPayQrCode');
+  const url = (input?.value || '').trim();
+  const settings = getGlobalSettings();
+  settings.payQrCode = url;
+  saveGlobalSettingsData(settings);
+  toast('全局收款码已保存', 'success');
+  updateSettingsPreview(url);
+}
+
+// Real-time preview when input changes
+document.getElementById('globalPayQrCode')?.addEventListener('input', function() {
+  updateSettingsPreview(this.value.trim());
+});
 
 function renderOrders() {
   const orders = loadOrders();
