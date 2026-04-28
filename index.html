@@ -1,0 +1,1139 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>船员培训中心 - 课程报名</title>
+  <meta name="description" content="海洋船员培训课程在线报名与管理平台">
+  <meta name="theme-color" content="#0B1929">
+  <meta name="color-scheme" content="dark">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy-deep:#0B1929;--navy:#112240;--navy-mid:#1B3A5C;--navy-light:#234e7a;
+      --brass:#C8A951;--brass-light:#E8C96A;--brass-dim:rgba(200,169,81,0.15);
+      --sea-foam:#2ECC71;--coral:#E74C3C;--slate:#7B94B0;
+      --ivory:#F5F0E8;--parchment:#EDE8DC;--white:#FFFFFF;
+      --radius-sm:6px;--radius-md:12px;--radius-lg:20px;
+      --shadow-card:0 8px 32px rgba(0,0,0,0.35);--shadow-float:0 20px 60px rgba(0,0,0,0.5);
+      --transition:0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--navy-deep);color:var(--ivory);min-height:100vh;overflow-x:hidden}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--navy-deep)}::-webkit-scrollbar-thumb{background:var(--brass);border-radius:3px}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 20%,rgba(200,169,81,0.06) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(27,74,114,0.4) 0%,transparent 60%);pointer-events:none;z-index:0}
+
+    /* Nav */
+    .nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(11,25,41,0.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(200,169,81,0.2)}
+    .nav-left{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ivory)}
+    .nav-logo{width:36px;height:36px;color:var(--brass);filter:drop-shadow(0 0 8px rgba(200,169,81,0.4))}
+    .nav-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;letter-spacing:.5px}
+    .nav-subtitle{font-size:11px;color:var(--slate);letter-spacing:2px;text-transform:uppercase;margin-top:1px}
+    .nav-right{display:flex;align-items:center;gap:12px}
+    .nav-badge{display:flex;align-items:center;gap:6px;background:var(--brass-dim);border:1px solid rgba(200,169,81,0.3);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--brass-light);font-family:'JetBrains Mono',monospace}
+    .nav-admin-btn{display:flex;align-items:center;gap:6px;background:var(--brass-dim);border:1px solid rgba(200,169,81,0.35);border-radius:24px;padding:7px 18px;color:var(--brass-light);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:var(--transition)}
+    .nav-admin-btn:hover{background:var(--brass);color:var(--navy-deep)}
+    .nav-wechat-btn{display:flex;align-items:center;gap:6px;background:rgba(7,193,96,0.15);border:1px solid rgba(7,193,96,0.35);border-radius:24px;padding:7px 18px;color:#07C160;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:var(--transition)}
+    .nav-wechat-btn:hover{background:#07C160;color:#fff}
+    .nav-user-info{display:flex;align-items:center;gap:10px}
+    .nav-user-avatar{width:32px;height:32px;border-radius:50%;background:var(--brass);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--navy-deep);font-weight:600}
+    .nav-user-name{font-size:13px;color:var(--ivory)}
+
+    /* WeChat Login Modal */
+    .wechat-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:10000;display:none;align-items:center;justify-content:center}
+    .wechat-modal-overlay.show{display:flex}
+    .wechat-modal{background:var(--navy);border:1px solid rgba(200,169,81,0.25);border-radius:var(--radius-lg);padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:var(--shadow-float);animation:modalIn 0.3s ease}
+    .wechat-modal h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--ivory);margin-bottom:8px}
+    .wechat-modal p{font-size:14px;color:var(--slate);margin-bottom:24px}
+    .wechat-qr{width:200px;height:200px;background:var(--white);border-radius:var(--radius-md);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:120px;color:#07C160}
+    .wechat-login-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#07C160;border:none;border-radius:var(--radius-sm);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:var(--transition)}
+    .wechat-login-btn:hover{background:#06AD56}
+    .wechat-close-btn{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--slate);font-size:20px;cursor:pointer}
+
+    /* Order Query Section */
+    .order-query-section{max-width:600px;margin:40px auto;padding:0 40px}
+    .order-query-card{background:var(--navy);border:1px solid rgba(200,169,81,0.2);border-radius:var(--radius-lg);padding:32px}
+    .order-query-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--ivory);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+    .order-query-desc{font-size:13px;color:var(--slate);margin-bottom:20px}
+    .order-query-form{display:flex;gap:10px}
+    .order-query-input{flex:1;padding:10px 16px;background:var(--navy-deep);border:1px solid rgba(200,169,81,0.25);border-radius:var(--radius-sm);color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:var(--transition)}
+    .order-query-input:focus{border-color:var(--brass)}
+    .order-query-btn{background:var(--brass);border:none;border-radius:var(--radius-sm);padding:10px 24px;color:var(--navy-deep);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);white-space:nowrap}
+    .order-query-btn:hover{background:var(--brass-light)}
+    .order-query-result{margin-top:20px}
+    .order-query-empty{text-align:center;padding:24px;color:var(--slate);font-size:14px}
+    .order-query-list{display:flex;flex-direction:column;gap:12px}
+    .order-query-item{background:var(--navy-deep);border:1px solid rgba(200,169,81,0.15);border-radius:var(--radius-md);padding:16px;display:flex;justify-content:space-between;align-items:center}
+    .order-query-item-left{display:flex;flex-direction:column;gap:4px}
+    .order-query-item-name{font-size:15px;font-weight:600;color:var(--ivory)}
+    .order-query-item-meta{font-size:12px;color:var(--slate);display:flex;gap:12px;font-family:'JetBrains Mono',monospace}
+    .order-query-item-right{text-align:right}
+    .order-query-item-status{font-size:12px;padding:4px 10px;border-radius:20px;font-weight:500}
+    .order-query-item-status.paid{background:rgba(46,204,113,0.15);color:var(--sea-foam)}
+    .order-query-item-status.unpaid{background:rgba(231,76,60,0.15);color:var(--coral)}
+    .order-query-item-amount{font-size:16px;font-weight:700;color:var(--brass);margin-top:4px}
+
+    /* Hero */
+    .hero{position:relative;padding:80px 40px 60px;text-align:center;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cpath d='M0 0h100v100H0z' fill='none'/%3E%3Cpath d='M0 50h100M50 0v100' stroke='%23ffffff' stroke-width='0.15' opacity='0.4'/%3E%3C/svg%3E") repeat;opacity:.3}
+    .hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,var(--navy-deep))}
+    .hero-content{position:relative;z-index:1;max-width:680px;margin:0 auto}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--brass);margin-bottom:20px;font-family:'JetBrains Mono',monospace}
+    .hero-eyebrow::before,.hero-eyebrow::after{content:'';width:30px;height:1px;background:var(--brass);opacity:.6}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,56px);font-weight:700;line-height:1.15;color:var(--ivory);margin-bottom:18px}
+    .hero p{font-size:16px;color:var(--slate);line-height:1.7;max-width:520px;margin:0 auto 32px}
+    .hero-stats{display:flex;justify-content:center;gap:48px;padding:28px 0;border-top:1px solid rgba(200,169,81,0.15);border-bottom:1px solid rgba(200,169,81,0.15)}
+    .hero-stat{text-align:center}
+    .hero-stat-value{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--brass)}
+    .hero-stat-label{font-size:12px;color:var(--slate);margin-top:4px;letter-spacing:1px;text-transform:uppercase}
+
+    /* Filter */
+    .filter-bar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;max-width:1240px;margin:0 auto;padding:0 40px}
+    .filter-tags{display:flex;flex-wrap:wrap;gap:8px}
+    .filter-tag{padding:8px 18px;border-radius:24px;border:1px solid rgba(200,169,81,0.25);background:transparent;color:var(--slate);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:var(--transition)}
+    .filter-tag:hover{border-color:var(--brass);color:var(--brass-light)}
+    .filter-tag.active{background:var(--brass);border-color:var(--brass);color:var(--navy-deep);font-weight:600}
+    .search-box{display:flex;align-items:center;background:var(--navy);border:1px solid rgba(200,169,81,0.2);border-radius:28px;padding:6px 6px 6px 18px;gap:10px;transition:var(--transition)}
+    .search-box:focus-within{border-color:var(--brass);box-shadow:0 0 0 3px rgba(200,169,81,0.1)}
+    .search-box svg{color:var(--slate);flex-shrink:0}
+    .search-box input{background:none;border:none;outline:none;color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:14px;width:180px}
+    .search-box input::placeholder{color:var(--slate)}
+    .search-btn{background:var(--brass);border:none;border-radius:22px;padding:8px 20px;color:var(--navy-deep);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition)}
+    .search-btn:hover{background:var(--brass-light)}
+
+    /* Grid */
+    .courses-section{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:40px 40px 80px}
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .section-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ivory);display:flex;align-items:center;gap:10px}
+    .section-title::before{content:'';width:4px;height:22px;background:var(--brass);border-radius:2px}
+    .course-count{font-size:13px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+    .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+
+    /* Card */
+    .course-card{background:var(--navy);border-radius:var(--radius-lg);overflow:hidden;border:1px solid rgba(200,169,81,0.1);box-shadow:var(--shadow-card);transition:var(--transition);cursor:pointer;position:relative;opacity:0;transform:translateY(30px)}
+    .course-card.visible{opacity:1;transform:translateY(0)}
+    .course-card:hover{transform:translateY(-6px);border-color:rgba(200,169,81,0.4);box-shadow:0 16px 48px rgba(0,0,0,0.45),0 0 0 1px rgba(200,169,81,0.2)}
+    .card-top-stripe{height:4px}
+    .card-body{padding:20px}
+    .card-header-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+    .card-category{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;padding:4px 10px;border-radius:4px;background:rgba(200,169,81,0.12);color:var(--brass);border:1px solid rgba(200,169,81,0.2)}
+    .card-difficulty{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+    .card-difficulty .stars{color:var(--brass);font-size:10px;letter-spacing:-1px}
+    .card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ivory);line-height:1.35;margin-bottom:10px}
+    .card-desc{font-size:13px;color:var(--slate);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:16px}
+    .card-meta{display:flex;flex-wrap:wrap;gap:8px}
+    .card-meta-tag{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--slate);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:4px 8px;font-family:'JetBrains Mono',monospace}
+    .card-meta-tag svg{opacity:.7}
+    .card-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between}
+    .card-price-group{display:flex;flex-direction:column}
+    .card-price{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--brass)}
+    .card-price-unit{font-size:11px;color:var(--slate);margin-top:1px}
+    .card-apply-btn{background:var(--brass);color:var(--navy-deep);border:none;border-radius:24px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition)}
+    .card-apply-btn:hover{background:var(--brass-light);transform:scale(1.05)}
+    .card-apply-btn:active{transform:scale(0.96)}
+    .card-full .card-apply-btn{background:rgba(255,255,255,0.08);color:var(--slate);cursor:not-allowed}
+    .card-full .card-apply-btn:hover{transform:none;background:rgba(255,255,255,0.08)}
+    .full-badge{position:absolute;top:16px;right:16px;background:rgba(231,76,60,0.2);border:1px solid rgba(231,76,60,0.4);color:#E74C3C;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;padding:3px 8px;border-radius:4px}
+
+    /* Empty */
+    .empty-state{text-align:center;padding:80px 20px;display:none}
+    .empty-state.show{display:block}
+    .empty-icon{width:80px;height:80px;margin:0 auto 20px;color:var(--slate);opacity:.5}
+    .empty-state h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--ivory);margin-bottom:10px}
+    .empty-state p{color:var(--slate);margin-bottom:24px;font-size:14px}
+    .empty-reset-btn{display:inline-block;padding:10px 24px;border:1px solid var(--brass);color:var(--brass);border-radius:24px;font-size:13px;cursor:pointer;background:none;transition:var(--transition)}
+    .empty-reset-btn:hover{background:var(--brass);color:var(--navy-deep)}
+
+    /* Apply Modal */
+    .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(5,15,30,0.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal{background:var(--parchment);border-radius:var(--radius-lg);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-float);transform:translateY(40px) scale(.97);transition:transform .35s cubic-bezier(.34,1.56,.64,1);position:relative}
+    .modal-overlay.open .modal{transform:translateY(0) scale(1)}
+    .modal-header{padding:28px 32px 20px;border-bottom:1px solid rgba(11,25,41,0.1);position:relative}
+    .modal-close{position:absolute;top:20px;right:20px;width:32px;height:32px;border-radius:50%;border:1px solid rgba(11,25,41,0.15);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6B7A8D;transition:var(--transition)}
+    .modal-close:hover{background:rgba(11,25,41,0.08)}
+    .modal-course-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--slate);margin-bottom:8px}
+    .modal-course-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--navy-deep);line-height:1.3}
+    .modal-divider{display:flex;align-items:center;gap:12px;padding:0 32px;margin:16px 0}
+    .modal-divider-line{flex:1;height:1px;background:rgba(11,25,41,0.1)}
+    .modal-divider-icon{color:var(--brass)}
+    .modal-body{padding:24px 32px 32px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+    .form-group{position:relative}
+    .form-group.full{grid-column:1/-1}
+    .form-label{display:block;font-size:12px;font-weight:500;color:#4A5568;margin-bottom:6px;letter-spacing:.3px}
+    .form-label span{color:var(--coral);margin-left:2px}
+    .form-input{width:100%;padding:12px 16px;border:1.5px solid #D1D5DB;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--navy-deep);background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s}
+    .form-input:focus{border-color:var(--navy-mid);box-shadow:0 0 0 3px rgba(27,58,92,0.1)}
+    .form-input.error{border-color:var(--coral)}
+    .form-input.error:focus{box-shadow:0 0 0 3px rgba(231,76,60,0.1)}
+    .form-error{font-size:11px;color:var(--coral);margin-top:4px;display:none;align-items:center;gap:4px}
+    .form-group.has-error .form-error{display:flex}
+    .form-submit{width:100%;margin-top:24px;padding:14px;background:var(--navy-deep);color:var(--brass);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+    .form-submit:hover{background:var(--navy);transform:translateY(-2px)}
+    .form-submit:active{transform:scale(.98)}
+
+    /* Success */
+    .success-screen{text-align:center;padding:40px 32px;display:none}
+    .success-screen.show{display:block}
+    .success-icon-wrap{width:72px;height:72px;margin:0 auto 20px;background:rgba(46,204,113,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:success-pop .5s cubic-bezier(.34,1.56,.64,1) both}
+    @keyframes success-pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+    .success-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy-deep);margin-bottom:10px}
+    .success-desc{font-size:14px;color:#6B7A8D;margin-bottom:28px;line-height:1.6}
+    .success-ticket{background:var(--navy-deep);border-radius:var(--radius-md);padding:20px 24px;margin-bottom:24px;text-align:left}
+    .success-ticket-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--brass);margin-bottom:8px}
+    .success-ticket-code{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;color:var(--ivory);letter-spacing:3px}
+    .success-ticket-row{display:flex;justify-content:space-between;font-size:12px;color:var(--slate);margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08)}
+    .success-ticket-row span:last-child{color:var(--ivory);font-family:'JetBrains Mono',monospace}
+    .success-close-btn{display:inline-block;padding:12px 32px;border:1.5px solid var(--navy-deep);color:var(--navy-deep);border-radius:28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;background:none;transition:var(--transition)}
+    .success-close-btn:hover{background:var(--navy-deep);color:var(--brass)}
+
+    /* ═══════════════════════════════════════ */
+    /* ─── ADMIN PANEL ─── */
+    /* ═══════════════════════════════════════ */
+    .admin-overlay{position:fixed;inset:0;z-index:300;background:rgba(5,15,30,0.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s ease}
+    .admin-overlay.open{opacity:1;pointer-events:all}
+    .admin-panel{position:fixed;top:0;right:0;bottom:0;z-index:301;width:680px;max-width:100vw;background:var(--navy);border-left:1px solid rgba(200,169,81,0.2);box-shadow:-20px 0 60px rgba(0,0,0,0.5);transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+    .admin-overlay.open .admin-panel{transform:translateX(0)}
+    .admin-topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid rgba(200,169,81,0.15);flex-shrink:0}
+    .admin-topbar-left{display:flex;align-items:center;gap:12px}
+    .admin-topbar-icon{color:var(--brass)}
+    .admin-topbar-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--ivory)}
+    .admin-topbar-sub{font-size:11px;color:var(--slate);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+    .admin-close-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(200,169,81,0.25);background:none;color:var(--slate);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+    .admin-close-btn:hover{border-color:var(--brass);color:var(--brass);background:var(--brass-dim)}
+    .admin-body{flex:1;overflow-y:auto;padding:24px 28px}
+    .admin-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .admin-list-title{font-size:14px;font-weight:600;color:var(--ivory);display:flex;align-items:center;gap:8px}
+    .admin-list-title .count{background:var(--brass);color:var(--navy-deep);font-size:11px;font-weight:700;border-radius:10px;padding:2px 8px;font-family:'JetBrains Mono',monospace}
+    .admin-add-btn{display:flex;align-items:center;gap:6px;background:var(--brass);color:var(--navy-deep);border:none;border-radius:20px;padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition)}
+    .admin-add-btn:hover{background:var(--brass-light);transform:scale(1.03)}
+    .admin-course-list{display:flex;flex-direction:column;gap:12px}
+    .admin-course-item{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(200,169,81,0.1);border-radius:var(--radius-md);padding:16px;transition:var(--transition)}
+    .admin-course-item:hover{border-color:rgba(200,169,81,0.3);background:rgba(255,255,255,0.05)}
+    .admin-item-stripe{width:4px;height:48px;border-radius:2px;flex-shrink:0}
+    .admin-item-info{flex:1;min-width:0}
+    .admin-item-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:var(--ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .admin-item-meta{display:flex;align-items:center;gap:12px;margin-top:4px;font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+    .admin-item-badge{font-size:10px;padding:2px 7px;border-radius:3px;border:1px solid;letter-spacing:.5px}
+    .admin-item-full{font-size:10px;color:#E74C3C;background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.3);padding:2px 7px;border-radius:3px;letter-spacing:.5px}
+    .admin-item-actions{display:flex;gap:8px;flex-shrink:0}
+    .admin-action-btn{width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:none;color:var(--slate);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);font-size:13px}
+    .admin-action-btn:hover{border-color:var(--brass);color:var(--brass);background:var(--brass-dim)}
+    .admin-action-btn.delete:hover{border-color:var(--coral);color:var(--coral);background:rgba(231,76,60,0.1)}
+    .admin-form{display:none}.admin-form.show{display:block}
+    .admin-form-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .admin-form-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ivory)}
+    .admin-back-btn{display:flex;align-items:center;gap:6px;background:none;border:1px solid rgba(200,169,81,0.25);border-radius:20px;padding:6px 14px;color:var(--slate);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--transition)}
+    .admin-back-btn:hover{border-color:var(--brass);color:var(--brass)}
+    .admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+    .admin-form-group{display:flex;flex-direction:column;gap:6px}
+    .admin-form-group.full{grid-column:1/-1}
+    .admin-label{font-size:12px;font-weight:500;color:var(--slate);letter-spacing:.3px}
+    .admin-label span{color:var(--coral)}
+    .admin-input{width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(200,169,81,0.2);border-radius:var(--radius-sm);color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+    .admin-input:focus{border-color:var(--brass)}
+    .admin-input::placeholder{color:rgba(123,148,176,0.6)}
+    select.admin-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237B94B0' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+    select.admin-input option{background:var(--navy);color:var(--ivory)}
+    textarea.admin-input{resize:vertical;min-height:80px}
+    .admin-checkbox-label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--slate);cursor:pointer}
+    .admin-checkbox-label input[type="checkbox"]{width:18px;height:18px;accent-color:var(--brass)}
+    .admin-save-btn{width:100%;margin-top:24px;padding:13px;background:var(--brass);color:var(--navy-deep);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+    .admin-save-btn:hover{background:var(--brass-light)}
+    .admin-confirm{display:none;text-align:center;padding:40px 20px}
+    .admin-confirm.show{display:block}
+    .admin-confirm-icon{width:56px;height:56px;margin:0 auto 16px;background:rgba(231,76,60,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center}
+    .admin-confirm h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--ivory);margin-bottom:8px}
+    .admin-confirm p{color:var(--slate);font-size:14px;margin-bottom:24px}
+    .admin-confirm-btns{display:flex;gap:12px;justify-content:center}
+    .admin-confirm-cancel{padding:10px 24px;border:1px solid rgba(200,169,81,0.3);border-radius:20px;background:none;color:var(--slate);font-size:13px;cursor:pointer;transition:var(--transition)}
+    .admin-confirm-cancel:hover{border-color:var(--brass);color:var(--brass)}
+    .admin-confirm-delete{padding:10px 24px;border:none;border-radius:20px;background:var(--coral);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition)}
+    .admin-confirm-delete:hover{background:#c0392b}
+
+    /* Toast */
+    .toast-wrap{position:fixed;top:80px;right:24px;z-index:500;display:flex;flex-direction:column;gap:8px}
+    .toast{padding:12px 20px;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;animation:toast-in .3s ease both;max-width:320px}
+    .toast.success{background:#1a3a2a;color:var(--sea-foam);border:1px solid rgba(46,204,113,0.3)}
+    .toast.error{background:#3a1a1a;color:var(--coral);border:1px solid rgba(231,76,60,0.3)}
+    .toast.info{background:var(--navy-mid);color:var(--brass-light);border:1px solid rgba(200,169,81,0.3)}
+    @keyframes toast-in{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+    .footer{text-align:center;padding:32px 40px;border-top:1px solid rgba(200,169,81,0.1);color:var(--slate);font-size:12px;font-family:'JetBrains Mono',monospace;position:relative;z-index:1}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+    .shake{animation:shake .4s ease}
+    @media(max-width:1024px){.course-grid{grid-template-columns:repeat(2,1fr)}.hero-stats{gap:32px}.filter-bar,.courses-section{padding-left:24px;padding-right:24px}.nav{padding:0 24px}}
+    @media(max-width:640px){.course-grid{grid-template-columns:1fr}.hero h1{font-size:32px}.hero-stats{gap:24px}.hero-stat-value{font-size:26px}.filter-bar{flex-direction:column;align-items:stretch}.search-box input{width:120px}.form-grid,.admin-form-grid{grid-template-columns:1fr}.modal-body,.modal-header{padding:20px}.nav-title{font-size:16px}.admin-panel{width:100vw}}
+    /* ─── Admin Tabs ─── */
+    .admin-tabs{display:flex;border-bottom:1px solid rgba(200,169,81,0.15);margin-bottom:20px}
+    .admin-tab{padding:12px 20px;font-size:13px;font-weight:500;color:var(--slate);cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition);background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif}
+    .admin-tab:hover{color:var(--brass-light)}
+    .admin-tab.active{color:var(--brass);border-bottom-color:var(--brass);font-weight:600}
+    /* ─── Order List ─── */
+    .order-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .order-list-title{font-size:14px;font-weight:600;color:var(--ivory);display:flex;align-items:center;gap:8px}
+    .order-list-title .count{background:var(--brass);color:var(--navy-deep);font-size:11px;font-weight:700;border-radius:10px;padding:2px 8px;font-family:'JetBrains Mono',monospace}
+    .order-search{display:flex;align-items:center;gap:8px}
+    .order-search input{background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,81,0.2);border-radius:20px;padding:6px 14px;color:var(--ivory);font-size:12px;outline:none;width:160px;font-family:'DM Sans',sans-serif}
+    .order-search input:focus{border-color:var(--brass)}
+    .order-search input::placeholder{color:rgba(123,148,176,0.6)}
+    .order-list{display:flex;flex-direction:column;gap:10px}
+    .order-item{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(200,169,81,0.1);border-radius:var(--radius-md);padding:14px 16px;transition:var(--transition);cursor:pointer}
+    .order-item:hover{border-color:rgba(200,169,81,0.3);background:rgba(255,255,255,0.05)}
+    .order-item-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+    .order-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+    .order-icon.pending{background:rgba(243,156,18,0.15);color:#F39C12;border:1px solid rgba(243,156,18,0.3)}
+    .order-icon.paid{background:rgba(46,204,113,0.15);color:#2ECC71;border:1px solid rgba(46,204,113,0.3)}
+    .order-info{display:flex;flex-direction:column;gap:3px;min-width:0}
+    .order-name{font-size:14px;font-weight:600;color:var(--ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .order-meta{font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace;display:flex;gap:10px}
+    .order-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .order-amount{font-size:14px;font-weight:600;font-family:'JetBrains Mono',monospace}
+    .order-amount.pending{color:var(--coral)}
+    .order-amount.paid{color:var(--sea-foam)}
+    .order-badge{padding:3px 8px;border-radius:4px;font-size:10px;letter-spacing:.5px;font-weight:600}
+    .order-badge.pending{background:rgba(243,156,18,0.2);color:#F39C12;border:1px solid rgba(243,156,18,0.3)}
+    .order-badge.paid{background:rgba(46,204,113,0.2);color:#2ECC71;border:1px solid rgba(46,204,113,0.3)}
+    .order-delete-btn{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.25);border-radius:6px;padding:6px 8px;color:var(--coral);cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center}
+    .order-delete-btn:hover{background:rgba(231,76,60,0.25);border-color:var(--coral)}
+    .order-empty{text-align:center;padding:60px 20px;color:var(--slate);font-size:14px}
+    /* ─── Order Detail ─── */
+    .order-detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .order-detail-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ivory)}
+    .order-detail-card{background:rgba(255,255,255,0.03);border:1px solid rgba(200,169,81,0.12);border-radius:var(--radius-md);padding:20px;margin-bottom:20px}
+    .order-detail-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+    .order-detail-row:last-child{border-bottom:none}
+    .order-detail-label{color:var(--slate)}
+    .order-detail-value{color:var(--ivory);font-family:'JetBrains Mono',monospace;font-weight:500}
+    .order-payment-form{background:rgba(255,255,255,0.03);border:1px solid rgba(200,169,81,0.12);border-radius:var(--radius-md);padding:20px}
+    .order-payment-form h4{font-size:14px;color:var(--ivory);margin-bottom:16px;font-weight:600}
+    .order-payment-row{display:flex;gap:16px;align-items:flex-end}
+    .order-payment-row .admin-form-group{flex:1}
+    .order-save-btn{width:100%;margin-top:16px;padding:12px;background:var(--brass);color:var(--navy-deep);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+    .order-save-btn:hover{background:var(--brass-light)}
+    .order-save-btn:disabled{opacity:.5;cursor:not-allowed}
+    .order-amount-input{width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(200,169,81,0.2);border-radius:var(--radius-sm);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;outline:none}
+    .order-amount-input:focus{border-color:var(--brass)}
+    .order-amount-input::placeholder{color:rgba(123,148,176,0.6);font-weight:400;font-size:13px}
+  </style>
+</head>
+<body>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="#" class="nav-left" onclick="location.reload();return false;">
+    <svg class="nav-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L8 6H4l4 4-4 4h4l4 4 4-4h4l-4-4 4-4h-4L12 2z"/><circle cx="12" cy="12" r="2"/></svg>
+    <div><div class="nav-title">船员培训中心</div><div class="nav-subtitle">Maritime Training Center</div></div>
+  </a>
+  <div class="nav-right">
+    <div class="nav-badge"><svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#2ECC71"/></svg>系统运行正常</div>
+    <div class="nav-user-info" id="navUserInfo" style="display:none">
+      <div class="nav-user-avatar" id="navUserAvatar">?</div>
+      <span class="nav-user-name" id="navUserName"></span>
+    </div>
+    <button class="nav-wechat-btn" id="navWechatBtn" onclick="openWechatLogin()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.039-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.843-7.062-6.122zM14.033 13.2c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982z"/></svg>
+      微信登录
+    </button>
+    <button class="nav-admin-btn" onclick="openAdmin()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+      管理后台
+    </button>
+  </div>
+</nav>
+
+<!-- PWA Install Banner -->
+<div id="installBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--navy);border-top:1px solid rgba(200,169,81,0.3);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -4px 24px rgba(0,0,0,0.5)">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span style="font-size:22px">📱</span>
+    <div>
+      <div style="font-size:14px;font-weight:600;color:var(--ivory)">安装船员培训 App</div>
+      <div style="font-size:11px;color:var(--slate)">添加到手机桌面，更便捷使用</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button onclick="hideInstallBtn()" style="background:none;border:1px solid rgba(200,169,81,0.25);border-radius:8px;padding:8px 14px;color:var(--slate);font-size:13px;cursor:pointer">暂不需要</button>
+    <button id="installAppBtn" onclick="installApp()" style="display:none;background:#07C160;border:none;border-radius:8px;padding:8px 16px;color:#fff;font-size:13px;font-weight:600;cursor:pointer">立即安装</button>
+    <button onclick="hideInstallBtn()" style="background:none;border:1px solid rgba(200,169,81,0.25);border-radius:8px;padding:8px 14px;color:var(--slate);font-size:13px;cursor:pointer;display:none" id="installDismissBtn">暂不需要</button>
+  </div>
+</div>
+
+<!-- WeChat Login Modal -->
+<div class="wechat-modal-overlay" id="wechatModal">
+  <div class="wechat-modal">
+    <button class="wechat-close-btn" onclick="closeWechatLogin()">✕</button>
+    <h3>微信快捷登录</h3>
+    <p>扫码或使用微信账号快速登录，查询您的报名记录</p>
+    <div class="wechat-qr">💬</div>
+    <button class="wechat-login-btn" onclick="simulateWechatLogin()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.039-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.843-7.062-6.122zM14.033 13.2c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982z"/></svg>
+      模拟微信登录
+    </button>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">专业 · 合规 · 值得信赖</div>
+    <h1>船员培训课程<span style="display:block">在线<span style="color:var(--brass);font-style:italic">报名</span>平台</span></h1>
+    <p>覆盖安全培训、专业技能、法规学习全类目，持证上岗，守护每一次航程安全</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-value" id="statCourses">6</div><div class="hero-stat-label">精品课程</div></div>
+      <div class="hero-stat"><div class="hero-stat-value" id="statEnrolled">1,280+</div><div class="hero-stat-label">已报名人次</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">99.2%</div><div class="hero-stat-label">通过率</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Order Query Section -->
+<section class="order-query-section" id="orderQuerySection" style="display:none">
+  <div class="order-query-card">
+    <div class="order-query-title">📋 订单查询</div>
+    <div class="order-query-desc">输入您的身份证号，查询报名记录和培训费状态</div>
+    <div class="order-query-form">
+      <input class="order-query-input" type="text" id="orderQueryInput" placeholder="请输入18位身份证号码…" maxlength="18" />
+      <button class="order-query-btn" onclick="queryOrders()">查询订单</button>
+    </div>
+    <div class="order-query-result" id="orderQueryResult"></div>
+  </div>
+</section>
+
+<!-- Filter -->
+<div class="filter-bar">
+  <div class="filter-tags" id="filterTags"><button class="filter-tag active" data-filter="all">全部课程</button></div>
+  <div class="search-box">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="搜索课程名称…" />
+    <button class="search-btn" id="searchBtn">搜索</button>
+  </div>
+</div>
+
+<!-- Course Grid -->
+<section class="courses-section">
+  <div class="section-header"><div class="section-title">培训课程</div><div class="course-count" id="courseCount">0 个课程</div></div>
+  <div class="course-grid" id="courseGrid"></div>
+  <div class="empty-state" id="emptyState">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    <h3>未找到相关航线</h3><p>没有匹配到符合条件的课程，请尝试其他筛选条件</p>
+    <button class="empty-reset-btn" id="resetBtn">重置筛选</button>
+  </div>
+</section>
+
+<!-- Apply Modal -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div id="applyFormView">
+      <div class="modal-header">
+        <button class="modal-close" id="modalClose" aria-label="关闭"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        <div class="modal-course-label">课程报名</div>
+        <div class="modal-course-name" id="modalCourseName">—</div>
+      </div>
+      <div class="modal-divider"><div class="modal-divider-line"></div><svg class="modal-divider-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L8 6H4l4 4-4 4h4l4 4 4-4h4l-4-4 4-4h-4L12 2z"/></svg><div class="modal-divider-line"></div></div>
+      <div class="modal-body">
+        <form id="applyForm" novalidate>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">姓名 <span>*</span></label><input class="form-input" type="text" id="fName" placeholder="请输入真实姓名" autocomplete="name" /><div class="form-error"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>请输入姓名</div></div>
+            <div class="form-group"><label class="form-label">身份证号 <span>*</span></label><input class="form-input" type="text" id="fIdCard" placeholder="18位身份证号码" autocomplete="off" maxlength="18" /><div class="form-error"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>请输入有效身份证号</div></div>
+            <div class="form-group"><label class="form-label">手机号码 <span>*</span></label><input class="form-input" type="tel" id="fPhone" placeholder="11位手机号" autocomplete="tel" /><div class="form-error"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>请输入有效手机号</div></div>
+            <div class="form-group"><label class="form-label">职务 <span>*</span></label><select class="form-input" id="fTitle"><option value="">请选择职务</option><option>船长</option><option>大副</option><option>二副</option><option>三副</option><option>轮机长</option><option>大管轮</option><option>二管轮</option><option>三管轮</option><option>水手长</option><option>水手</option><option>机工</option><option>大厨</option><option>其他</option></select><div class="form-error"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>请选择职务</div></div>
+            <div class="form-group"><label class="form-label">紧急联系人</label><input class="form-input" type="text" id="fEmergency" placeholder="选填" /></div>
+            <div class="form-group"><label class="form-label">紧急联系电话</label><input class="form-input" type="tel" id="fEmergencyPhone" placeholder="选填" /></div>
+          </div>
+          <button type="submit" class="form-submit"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>提交报名</button>
+        </form>
+      </div>
+    </div>
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon-wrap"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2ECC71" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <div class="success-title">报名成功！</div>
+      <div class="success-desc">您的报名信息已提交，请保持手机畅通，培训顾问将在 24 小时内与您联系确认。</div>
+      <div class="success-ticket">
+        <div class="success-ticket-label">报名确认编号</div><div class="success-ticket-code" id="ticketCode">—</div>
+        <div class="success-ticket-row"><span>课程</span><span id="ticketCourse">—</span></div>
+        <div class="success-ticket-row"><span>报名时间</span><span id="ticketTime">—</span></div>
+        <div class="success-ticket-row"><span>状态</span><span style="color:var(--sea-foam)">已确认</span></div>
+      </div>
+      <button class="success-close-btn" id="successClose">完成</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-panel">
+    <div class="admin-topbar">
+      <div class="admin-topbar-left">
+        <svg class="admin-topbar-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        <div><div class="admin-topbar-title">课程管理</div><div class="admin-topbar-sub">Course Administration</div></div>
+      </div>
+      <button class="admin-close-btn" onclick="closeAdmin()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="admin-body">
+      <!-- Tab Bar -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="courses" onclick="switchAdminTab('courses')">📚 课程管理</button>
+        <button class="admin-tab" data-tab="orders" onclick="switchAdminTab('orders')">📋 订单管理</button>
+      </div>
+
+      <!-- ─── Course Management Views ─── -->
+      <div id="adminListView">
+        <div class="admin-list-header">
+          <div class="admin-list-title">课程列表 <span class="count" id="adminCourseCount">0</span></div>
+          <button class="admin-add-btn" onclick="showAddForm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>新增课程</button>
+        </div>
+        <div class="admin-course-list" id="adminCourseList"></div>
+      </div>
+      <div class="admin-form" id="adminFormView">
+        <div class="admin-form-header">
+          <div class="admin-form-title" id="adminFormTitle">新增课程</div>
+          <button class="admin-back-btn" onclick="showList()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>返回列表</button>
+        </div>
+        <div class="admin-form-grid">
+          <div class="admin-form-group full"><label class="admin-label">课程名称 <span>*</span></label><input class="admin-input" type="text" id="afName" placeholder="如：船舶消防与救生演练" /></div>
+          <div class="admin-form-group"><label class="admin-label">课程类别 <span>*</span></label><select class="admin-input" id="afCategory"><option value="">请选择类别</option><option>安全培训</option><option>专业技能</option><option>法规学习</option><option>应急处理</option></select></div>
+          <div class="admin-form-group"><label class="admin-label">培训时长 <span>*</span></label><input class="admin-input" type="text" id="afDuration" placeholder="如：3天" /></div>
+          <div class="admin-form-group"><label class="admin-label">难度等级 <span>*</span></label><select class="admin-input" id="afDifficulty"><option value="1">★ 入门</option><option value="2">★★ 基础</option><option value="3" selected>★★★ 中等</option><option value="4">★★★★ 较高</option><option value="5">★★★★★ 专家</option></select></div>
+          <div class="admin-form-group"><label class="admin-label">价格（元）<span>*</span></label><input class="admin-input" type="number" id="afPrice" placeholder="如：2800" min="0" /></div>
+          <div class="admin-form-group"><label class="admin-label">已报名人数</label><input class="admin-input" type="number" id="afEnrolled" placeholder="如：342" min="0" value="0" /></div>
+          <div class="admin-form-group"><label class="admin-label">标识颜色</label><input class="admin-input" type="color" id="afStripe" value="#C8A951" style="height:42px;padding:4px;cursor:pointer;" /></div>
+          <div class="admin-form-group"><div style="height:100%;display:flex;align-items:flex-end"><label class="admin-checkbox-label"><input type="checkbox" id="afFull" />名额已满（暂停报名）</label></div></div>
+          <div class="admin-form-group full"><label class="admin-label">课程描述 <span>*</span></label><textarea class="admin-input" id="afDesc" placeholder="请输入课程详细描述…" rows="3"></textarea></div>
+        </div>
+        <button class="admin-save-btn" onclick="saveCourse()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>保存课程</button>
+      </div>
+      <div class="admin-confirm" id="adminConfirmView">
+        <div class="admin-confirm-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E74C3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/></svg></div>
+        <h3>确认删除课程？</h3>
+        <p id="adminDeleteName">此操作不可恢复</p>
+        <div class="admin-confirm-btns"><button class="admin-confirm-cancel" onclick="showList()">取消</button><button class="admin-confirm-delete" onclick="confirmDelete()">确认删除</button></div>
+      </div>
+
+      <!-- ─── Order Management Views ─── -->
+      <div id="orderListView" style="display:none">
+        <div class="order-list-header">
+          <div class="order-list-title">报名订单 <span class="count" id="orderCount">0</span></div>
+          <div class="order-search">
+            <input type="text" id="orderSearchInput" placeholder="搜索姓名/身份证…" oninput="renderOrders()" />
+          </div>
+        </div>
+        <div class="order-list" id="orderList"></div>
+        <div class="order-empty" id="orderEmpty" style="display:none">暂无报名订单</div>
+      </div>
+      <div id="orderDetailView" style="display:none">
+        <div class="order-detail-header">
+          <div class="order-detail-title">订单详情</div>
+          <button class="admin-back-btn" onclick="switchAdminTab('orders')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>返回订单列表</button>
+        </div>
+        <div class="order-detail-card" id="orderDetailCard"></div>
+        <div class="order-payment-form" id="orderPaymentForm"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">© 2026 船员培训中心 · Maritime Training Center · 所有课程均经海事局认证</footer>
+
+<script>
+/* ═══ Data Layer (localStorage) ═══ */
+const DEFAULT_COURSES = [
+  {id:1,name:'船舶消防与救生演练',category:'安全培训',desc:'涵盖各类灭火器材操作、疏散逃生流程、海上救生艇筏操作与求生技能，通过实战演练强化应急反应能力。',duration:'3天',difficulty:2,price:2800,enrolled:342,full:false,stripe:'#E74C3C'},
+  {id:2,name:'GMDSS 全球海上遇险系统',category:'专业技能',desc:'系统学习卫星通信、无线电通信设备操作，符合SOLAS公约要求，持有GMDSS通用操作员证书。',duration:'5天',difficulty:4,price:4200,enrolled:198,full:false,stripe:'#3498DB'},
+  {id:3,name:'STCW 公约与航海英语',category:'法规学习',desc:'深入解读STCW马尼拉修正案航海英语要求，涵盖读写听说全技能，为船员适任证书英语评估做好准备。',duration:'4天',difficulty:3,price:3600,enrolled:456,full:false,stripe:'#8E44AD'},
+  {id:4,name:'油轮操作与安全（VLCC）',category:'专业技能',desc:'针对超大型油轮（VLCC）货物操作、液位监测、防静电管理、原油洗舱等专业技能，持有油轮操作证书。',duration:'6天',difficulty:5,price:5800,enrolled:87,full:true,stripe:'#E67E22'},
+  {id:5,name:'海上急救与医疗培训',category:'应急处理',desc:'学习心肺复苏（CPR）、止血固定、海上常见疾病处置，配合模拟人实操，通过急救证书考核。',duration:'2天',difficulty:2,price:2200,enrolled:521,full:false,stripe:'#2ECC71'},
+  {id:6,name:'ISM 安全管理体系内审',category:'法规学习',desc:'ISM Code 合规性内审技巧、不符合项识别与纠正措施编写，船舶安全评估与 Document of Compliance 办理流程。',duration:'3天',difficulty:3,price:3400,enrolled:165,full:false,stripe:'#F39C12'},
+];
+
+const STORAGE_KEY = 'crew_training_courses';
+
+function loadCourses() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) { saveCourses(DEFAULT_COURSES); return [...DEFAULT_COURSES]; }
+  try { return JSON.parse(raw); } catch { return [...DEFAULT_COURSES]; }
+}
+function saveCourses(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+let COURSES = loadCourses();
+let currentFilter = 'all', currentSearch = '';
+
+/* ═══ Toast ═══ */
+function toast(msg, type='info') {
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(() => { el.style.animation = 'toast-out .3s ease both'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+/* ═══ Helper ═══ */
+function getStars(n) { return '★'.repeat(n) + '☆'.repeat(5-n); }
+function getDiffLabel(n) { return ['','入门','基础','中等','较高','专家'][n] || ''; }
+function nextId() { return COURSES.length ? Math.max(...COURSES.map(c=>c.id)) + 1 : 1; }
+
+/* ═══ Update Stats ═══ */
+function updateStats() {
+  document.getElementById('statCourses').textContent = COURSES.length;
+  const total = COURSES.reduce((s,c) => s + (c.enrolled||0), 0);
+  document.getElementById('statEnrolled').textContent = total >= 1000 ? (total/1000).toFixed(1).replace(/\.0$/,'') + ',000+' : total + '+';
+}
+
+/* ═══ Update Filter Tags ═══ */
+function updateFilterTags() {
+  const cats = [...new Set(COURSES.map(c=>c.category))];
+  const tagsEl = document.getElementById('filterTags');
+  let html = '<button class="filter-tag active" data-filter="all">全部课程</button>';
+  cats.forEach(cat => { html += `<button class="filter-tag" data-filter="${cat}">${cat}</button>`; });
+  tagsEl.innerHTML = html;
+  // Rebind
+  tagsEl.querySelectorAll('.filter-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      tagsEl.querySelectorAll('.filter-tag').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderCourses();
+    });
+  });
+}
+
+/* ═══ Render Front-end Cards ═══ */
+function renderCourses() {
+  const grid = document.getElementById('courseGrid');
+  const empty = document.getElementById('emptyState');
+  const countEl = document.getElementById('courseCount');
+  let filtered = COURSES.filter(c => {
+    const matchCat = currentFilter === 'all' || c.category === currentFilter;
+    const matchSearch = !currentSearch || c.name.includes(currentSearch) || c.desc.includes(currentSearch);
+    return matchCat && matchSearch;
+  });
+  countEl.textContent = filtered.length + ' 个课程';
+  if (!filtered.length) { grid.innerHTML = ''; empty.classList.add('show'); return; }
+  empty.classList.remove('show');
+  grid.innerHTML = filtered.map((c,i) => {
+    const fc = c.full ? ' card-full' : '';
+    return `<div class="course-card${fc}" data-id="${c.id}" style="animation-delay:${i*80}ms">
+      ${c.full ? '<div class="full-badge">名额已满</div>' : ''}
+      <div class="card-top-stripe" style="background:linear-gradient(90deg,${c.stripe},${c.stripe}88)"></div>
+      <div class="card-body">
+        <div class="card-header-row">
+          <span class="card-category">${c.category}</span>
+          <div class="card-difficulty" title="${getDiffLabel(c.difficulty)}"><span class="stars">${getStars(c.difficulty)}</span></div>
+        </div>
+        <h3 class="card-title">${c.name}</h3>
+        <p class="card-desc">${c.desc}</p>
+        <div class="card-meta">
+          <span class="card-meta-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>${c.duration}</span>
+          <span class="card-meta-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>${c.enrolled||0} 人已报名</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-price-group"><div class="card-price">¥${(c.price||0).toLocaleString()}</div><div class="card-price-unit">元 / 人</div></div>
+        ${c.full ? '<button class="card-apply-btn" disabled>已满员</button>' : `<button class="card-apply-btn" onclick="openModal(${c.id})">立即报名</button>`}
+      </div></div>`;
+  }).join('');
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.course-card').forEach((card,idx) => setTimeout(()=>card.classList.add('visible'), idx*80));
+  });
+}
+
+/* ═══ Search ═══ */
+const searchInput = document.getElementById('searchInput');
+document.getElementById('searchBtn').addEventListener('click', () => { currentSearch = searchInput.value.trim(); renderCourses(); });
+searchInput.addEventListener('keydown', e => { if (e.key==='Enter') { currentSearch = searchInput.value.trim(); renderCourses(); } });
+document.getElementById('resetBtn').addEventListener('click', () => {
+  currentFilter='all'; currentSearch=''; searchInput.value='';
+  document.querySelectorAll('.filter-tag').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filter-tag[data-filter="all"]').classList.add('active');
+  renderCourses();
+});
+
+/* ═══ Apply Modal ═══ */
+let currentCourseId = null;
+function openModal(courseId) {
+  currentCourseId = courseId;
+  const c = COURSES.find(x=>x.id===courseId); if(!c) return;
+  document.getElementById('modalCourseName').textContent = c.name;
+  document.getElementById('applyFormView').style.display = 'block';
+  document.getElementById('successScreen').classList.remove('show');
+  document.getElementById('applyForm').reset();
+  document.querySelectorAll('.form-group').forEach(g=>g.classList.remove('has-error'));
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow = ''; currentCourseId = null; }
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('successClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+
+/* ═══ Apply Form Validation ═══ */
+const validators = {
+  fName: v => v.trim().length >= 2,
+  fIdCard: v => /^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$/.test(v.trim()),
+  fPhone: v => /^1[3-9]\d{9}$/.test(v.trim()),
+  fTitle: v => v.trim() !== '',
+};
+function validateField(id) {
+  const input = document.getElementById(id);
+  const group = input.closest('.form-group');
+  const ok = validators[id] ? validators[id](input.value) : true;
+  group.classList.toggle('has-error', !ok); input.classList.toggle('error', !ok);
+  return ok;
+}
+document.querySelectorAll('#applyForm .form-input').forEach(input => {
+  input.addEventListener('blur', () => validateField(input.id));
+  input.addEventListener('input', () => { if(input.closest('.form-group').classList.contains('has-error')) validateField(input.id); });
+});
+document.getElementById('applyForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const fields = ['fName','fIdCard','fPhone','fTitle'];
+  if (!fields.map(id=>validateField(id)).every(Boolean)) {
+    const firstErr = document.querySelector('.form-group.has-error .form-input');
+    if(firstErr){ firstErr.classList.add('shake'); firstErr.focus(); setTimeout(()=>firstErr.classList.remove('shake'),500); }
+    return;
+  }
+  const course = COURSES.find(c=>c.id===currentCourseId);
+  const ticketCode = 'CR' + String(Math.floor(Math.random()*900000)+100000);
+  const now = new Date();
+  const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const records = JSON.parse(localStorage.getItem('crew_training_records')||'[]');
+  records.push({ ticketCode, courseName:course.name, name:document.getElementById('fName').value.trim(), idCard:document.getElementById('fIdCard').value.trim(), time:timeStr });
+  localStorage.setItem('crew_training_records', JSON.stringify(records));
+  document.getElementById('ticketCode').textContent = ticketCode;
+  document.getElementById('ticketCourse').textContent = course.name;
+  document.getElementById('ticketTime').textContent = timeStr;
+  document.getElementById('applyFormView').style.display = 'none';
+  document.getElementById('successScreen').classList.add('show');
+});
+
+/* ═══════════════════════════════════════════ */
+/* ═══ ADMIN PANEL ═══ */
+/* ═══════════════════════════════════════════ */
+let editingId = null, deletingId = null;
+
+function openAdmin() {
+  document.getElementById('adminOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  showList();
+}
+function closeAdmin() {
+  document.getElementById('adminOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function showView(list, form, confirm) {
+  document.getElementById('adminListView').style.display = list ? 'block' : 'none';
+  document.getElementById('adminFormView').classList.toggle('show', form);
+  document.getElementById('adminConfirmView').classList.toggle('show', confirm);
+}
+function showList() { showView(true, false, false); renderAdminList(); }
+
+function renderAdminList() {
+  const list = document.getElementById('adminCourseList');
+  document.getElementById('adminCourseCount').textContent = COURSES.length;
+  if (!COURSES.length) {
+    list.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--slate)">暂无课程，点击"新增课程"添加</div>';
+    return;
+  }
+  list.innerHTML = COURSES.map(c => `
+    <div class="admin-course-item">
+      <div class="admin-item-stripe" style="background:${c.stripe}"></div>
+      <div class="admin-item-info">
+        <div class="admin-item-name">${c.name}</div>
+        <div class="admin-item-meta">
+          <span class="admin-item-badge" style="color:${c.stripe};border-color:${c.stripe}55">${c.category}</span>
+          <span>${c.duration}</span>
+          <span>¥${(c.price||0).toLocaleString()}</span>
+          <span>${c.enrolled||0}人</span>
+          ${c.full ? '<span class="admin-item-full">已满</span>' : ''}
+        </div>
+      </div>
+      <div class="admin-item-actions">
+        <button class="admin-action-btn" title="编辑" onclick="showEditForm(${c.id})">✎</button>
+        <button class="admin-action-btn delete" title="删除" onclick="showDeleteConfirm(${c.id})">✕</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showAddForm() {
+  editingId = null;
+  document.getElementById('adminFormTitle').textContent = '新增课程';
+  document.getElementById('afName').value = '';
+  document.getElementById('afCategory').value = '';
+  document.getElementById('afDuration').value = '';
+  document.getElementById('afDifficulty').value = '3';
+  document.getElementById('afPrice').value = '';
+  document.getElementById('afEnrolled').value = '0';
+  document.getElementById('afStripe').value = '#C8A951';
+  document.getElementById('afFull').checked = false;
+  document.getElementById('afDesc').value = '';
+  showView(false, true, false);
+}
+
+function showEditForm(id) {
+  const c = COURSES.find(x=>x.id===id); if(!c) return;
+  editingId = id;
+  document.getElementById('adminFormTitle').textContent = '编辑课程';
+  document.getElementById('afName').value = c.name;
+  document.getElementById('afCategory').value = c.category;
+  document.getElementById('afDuration').value = c.duration;
+  document.getElementById('afDifficulty').value = c.difficulty;
+  document.getElementById('afPrice').value = c.price;
+  document.getElementById('afEnrolled').value = c.enrolled || 0;
+  document.getElementById('afStripe').value = c.stripe || '#C8A951';
+  document.getElementById('afFull').checked = !!c.full;
+  document.getElementById('afDesc').value = c.desc;
+  showView(false, true, false);
+}
+
+function saveCourse() {
+  const name = document.getElementById('afName').value.trim();
+  const category = document.getElementById('afCategory').value;
+  const duration = document.getElementById('afDuration').value.trim();
+  const difficulty = parseInt(document.getElementById('afDifficulty').value);
+  const price = parseInt(document.getElementById('afPrice').value);
+  const enrolled = parseInt(document.getElementById('afEnrolled').value) || 0;
+  const stripe = document.getElementById('afStripe').value;
+  const full = document.getElementById('afFull').checked;
+  const desc = document.getElementById('afDesc').value.trim();
+
+  if (!name || !category || !duration || isNaN(price) || !desc) {
+    toast('请填写所有必填项', 'error');
+    return;
+  }
+
+  if (editingId !== null) {
+    const idx = COURSES.findIndex(c=>c.id===editingId);
+    if (idx >= 0) { COURSES[idx] = { ...COURSES[idx], name, category, duration, difficulty, price, enrolled, stripe, full, desc }; }
+    toast('课程已更新', 'success');
+  } else {
+    COURSES.push({ id: nextId(), name, category, duration, difficulty, price, enrolled, stripe, full, desc });
+    toast('课程已添加', 'success');
+  }
+  saveCourses(COURSES);
+  refreshAll();
+  showList();
+}
+
+function showDeleteConfirm(id) {
+  const c = COURSES.find(x=>x.id===id); if(!c) return;
+  deletingId = id;
+  document.getElementById('adminDeleteName').textContent = `即将删除「${c.name}」，此操作不可恢复`;
+  showView(false, false, true);
+}
+
+function confirmDelete() {
+  COURSES = COURSES.filter(c=>c.id!==deletingId);
+  saveCourses(COURSES);
+  toast('课程已删除', 'info');
+  refreshAll();
+  showList();
+  deletingId = null;
+}
+
+function refreshAll() {
+  updateStats();
+  updateFilterTags();
+  renderCourses();
+}
+
+/* ═════════════════════════════════════════ */
+/* ─── ADMIN TABS & ORDER MANAGEMENT ─── */
+/* ═════════════════════════════════════════ */
+function switchAdminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.getElementById('adminListView').style.display = tab === 'courses' ? 'block' : 'none';
+  document.getElementById('adminFormView').classList.toggle('show', tab === 'courses' && document.getElementById('adminFormView').classList.contains('show'));
+  document.getElementById('adminConfirmView').classList.toggle('show', tab === 'courses' && document.getElementById('adminConfirmView').classList.contains('show'));
+  document.getElementById('orderListView').style.display = tab === 'orders' ? 'block' : 'none';
+  document.getElementById('orderDetailView').style.display = 'none';
+  if (tab === 'orders') renderOrders();
+  if (tab === 'courses') renderAdminList();
+}
+
+function loadOrders() {
+  try { return JSON.parse(localStorage.getItem('crew_training_records') || '[]'); }
+  catch { return []; }
+}
+function saveOrders(orders) { localStorage.setItem('crew_training_records', JSON.stringify(orders)); }
+
+function renderOrders() {
+  const orders = loadOrders();
+  const search = (document.getElementById('orderSearchInput')?.value || '').trim().toLowerCase();
+  const filtered = search
+    ? orders.filter(o => (o.name||'').toLowerCase().includes(search) || (o.idCard||'').toLowerCase().includes(search))
+    : orders;
+  document.getElementById('orderCount').textContent = filtered.length;
+  const list = document.getElementById('orderList');
+  const empty = document.getElementById('orderEmpty');
+  if (!filtered.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = filtered.map((o, i) => {
+    const idx = orders.indexOf(o);
+    const isPaid = o.paid;
+    const iconClass = isPaid ? 'paid' : 'pending';
+    const badgeClass = isPaid ? 'paid' : 'pending';
+    const badgeText = isPaid ? '已付培训费' : '待付培训费';
+    const amount = o.downPayment ? '¥' + Number(o.downPayment).toLocaleString() : '—';
+    const amountClass = isPaid ? 'paid' : 'pending';
+    return `<div class="order-item" onclick="showOrderDetail(${idx})">
+      <div class="order-item-left">
+        <div class="order-icon ${iconClass}">${isPaid ? '✓' : '!'}</div>
+        <div class="order-info">
+          <div class="order-name">${o.name || '—'}</div>
+          <div class="order-meta">
+            <span>${o.courseName || '—'}</span>
+            <span>${o.idCard || '—'}</span>
+            <span>${o.time || '—'}</span>
+          </div>
+        </div>
+      </div>
+      <div class="order-right">
+        <div class="order-amount ${amountClass}">${amount}</div>
+        <div class="order-badge ${badgeClass}">${badgeText}</div>
+        <button class="order-delete-btn" onclick="event.stopPropagation();deleteOrder(${idx})" title="删除订单">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showOrderDetail(idx) {
+  const orders = loadOrders();
+  if (idx < 0 || idx >= orders.length) return;
+  const o = orders[idx];
+  document.getElementById('orderListView').style.display = 'none';
+  document.getElementById('orderDetailView').style.display = 'block';
+  const course = COURSES.find(c => c.name === o.courseName);
+  const price = course ? course.price : '—';
+  document.getElementById('orderDetailCard').innerHTML = `
+    <div class="order-detail-row"><div class="order-detail-label">报名人</div><div class="order-detail-value">${o.name || '—'}</div></div>
+    <div class="order-detail-row"><div class="order-detail-label">身份证号</div><div class="order-detail-value">${o.idCard || '—'}</div></div>
+    <div class="order-detail-row"><div class="order-detail-label">课程名称</div><div class="order-detail-value">${o.courseName || '—'}</div></div>
+    <div class="order-detail-row"><div class="order-detail-label">课程价格</div><div class="order-detail-value">¥${Number(price).toLocaleString()}</div></div>
+    <div class="order-detail-row"><div class="order-detail-label">报名时间</div><div class="order-detail-value">${o.time || '—'}</div></div>
+    <div class="order-detail-row"><div class="order-detail-label">确认编号</div><div class="order-detail-value" style="color:var(--brass)">${o.ticketCode || '—'}</div></div>
+    <div class="order-detail-row"><div class="order-detail-label">培训费状态</div><div class="order-detail-value" style="color:${o.paid ? 'var(--sea-foam)' : 'var(--coral)'}">${o.paid ? '✓ 已支付' : '✕ 待支付'}</div></div>
+    <div class="order-detail-row"><div class="order-detail-label">培训费金额</div><div class="order-detail-value">${o.downPayment ? '¥' + Number(o.downPayment).toLocaleString() : '未录入'}</div></div>
+  `;
+  const currentDown = o.downPayment || '';
+  document.getElementById('orderPaymentForm').innerHTML = `
+    <h4>💰 录入培训费</h4>
+    <div class="order-payment-row">
+      <div class="admin-form-group" style="gap:6px">
+        <label class="admin-label">培训费金额（元）</label>
+        <input class="order-amount-input" type="number" id="odAmount" value="${currentDown}" placeholder="输入培训费金额…" min="0" />
+      </div>
+    </div>
+    <button class="order-save-btn" id="odSaveBtn" onclick="saveDownPayment(${idx})">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      确认收款（标记已付）
+    </button>
+  `;
+}
+
+function saveDownPayment(idx) {
+  const orders = loadOrders();
+  if (idx < 0 || idx >= orders.length) return;
+  const amt = document.getElementById('odAmount').value.trim();
+  if (!amt || isNaN(Number(amt)) || Number(amt) <= 0) {
+    toast('请输入有效金额', 'error');
+    return;
+  }
+  orders[idx].downPayment = Number(amt);
+  orders[idx].paid = true;
+  saveOrders(orders);
+  toast('培训费已确认 ✓', 'success');
+  renderOrders();
+  showOrderDetail(idx);
+  // Update order count badge
+  const allOrders = loadOrders();
+  document.getElementById('orderCount').textContent = allOrders.length;
+}
+
+// Click overlay to close admin
+document.getElementById('adminOverlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeAdmin(); });
+
+/* ═══ WeChat Login ═══ */
+let currentUser = JSON.parse(localStorage.getItem('crew_training_user') || 'null');
+
+function openWechatLogin() {
+  document.getElementById('wechatModal').classList.add('show');
+}
+function closeWechatLogin() {
+  document.getElementById('wechatModal').classList.remove('show');
+}
+function simulateWechatLogin() {
+  // Simulate WeChat login with fake user data
+  const mockUser = {
+    name: '微信用户',
+    avatar: '微',
+    idCard: '310' + Math.floor(100000000 + Math.random() * 900000000) + 'X',
+    loginTime: new Date().toLocaleString('zh-CN')
+  };
+  currentUser = mockUser;
+  localStorage.setItem('crew_training_user', JSON.stringify(mockUser));
+  updateUserUI();
+  closeWechatLogin();
+  toast('微信登录成功 ✨', 'success');
+  // Show order query section
+  document.getElementById('orderQuerySection').style.display = 'block';
+  // Pre-fill ID card if available
+  if (mockUser.idCard) {
+    document.getElementById('orderQueryInput').value = mockUser.idCard;
+    setTimeout(() => queryOrders(), 300);
+  }
+}
+function logoutUser() {
+  currentUser = null;
+  localStorage.removeItem('crew_training_user');
+  updateUserUI();
+  document.getElementById('orderQuerySection').style.display = 'none';
+  document.getElementById('orderQueryResult').innerHTML = '';
+  toast('已退出登录', 'success');
+}
+function updateUserUI() {
+  const btn = document.getElementById('navWechatBtn');
+  const info = document.getElementById('navUserInfo');
+  const avatar = document.getElementById('navUserAvatar');
+  const name = document.getElementById('navUserName');
+  if (currentUser) {
+    btn.style.display = 'none';
+    info.style.display = 'flex';
+    avatar.textContent = currentUser.avatar || '微';
+    name.textContent = currentUser.name || '微信用户';
+    // Add logout button if not exists
+    if (!document.getElementById('navLogoutBtn')) {
+      const logoutBtn = document.createElement('button');
+      logoutBtn.id = 'navLogoutBtn';
+      logoutBtn.className = 'nav-wechat-btn';
+      logoutBtn.style.background = 'rgba(231,76,60,0.15)';
+      logoutBtn.style.borderColor = 'rgba(231,76,60,0.35)';
+      logoutBtn.style.color = '#E74C3C';
+      logoutBtn.innerHTML = '退出';
+      logoutBtn.onclick = logoutUser;
+      btn.parentNode.insertBefore(logoutBtn, btn);
+    }
+  } else {
+    btn.style.display = 'flex';
+    info.style.display = 'none';
+    const logoutBtn = document.getElementById('navLogoutBtn');
+    if (logoutBtn) logoutBtn.remove();
+  }
+}
+
+/* ═══ Order Query (Frontend) ═══ */
+function queryOrders() {
+  const idCard = document.getElementById('orderQueryInput').value.trim();
+  const resultDiv = document.getElementById('orderQueryResult');
+  if (!idCard) {
+    resultDiv.innerHTML = '<div class="order-query-empty">请输入身份证号码</div>';
+    return;
+  }
+  // Validate ID card format
+  const idCardRegex = /^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$/;
+  if (!idCardRegex.test(idCard)) {
+    resultDiv.innerHTML = '<div class="order-query-empty">请输入有效的18位身份证号码</div>';
+    return;
+  }
+  const orders = loadOrders();
+  const userOrders = orders.filter(o => o.idCard === idCard);
+  if (!userOrders.length) {
+    resultDiv.innerHTML = '<div class="order-query-empty">未找到该身份证号的报名记录</div>';
+    return;
+  }
+  // Sort by time descending
+  userOrders.sort((a, b) => new Date(b.time) - new Date(a.time));
+  resultDiv.innerHTML = `<div class="order-query-list">
+    ${userOrders.map(o => {
+      const isPaid = o.paid;
+      const statusClass = isPaid ? 'paid' : 'unpaid';
+      const statusText = isPaid ? '已付培训费' : '待付培训费';
+      const amount = o.downPayment ? '¥' + Number(o.downPayment).toLocaleString() : '未录入';
+      return `<div class="order-query-item">
+        <div class="order-query-item-left">
+          <div class="order-query-item-name">${o.courseName || '—'}</div>
+          <div class="order-query-item-meta">
+            <span>${o.name || '—'}</span>
+            <span>${o.time || '—'}</span>
+          </div>
+        </div>
+        <div class="order-query-item-right">
+          <div class="order-query-item-status ${statusClass}">${statusText}</div>
+          <div class="order-query-item-amount">${amount}</div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+/* ═══ Delete Order (Admin) ═══ */
+function deleteOrder(idx) {
+  if (!confirm('确定要删除这条订单记录吗？此操作不可恢复。')) return;
+  const orders = loadOrders();
+  if (idx < 0 || idx >= orders.length) return;
+  const deleted = orders.splice(idx, 1)[0];
+  saveOrders(orders);
+  toast(`已删除订单：${deleted.name} - ${deleted.courseName}`, 'success');
+  renderOrders();
+  // If in detail view, go back to list
+  document.getElementById('orderDetailView').style.display = 'none';
+  document.getElementById('orderListView').style.display = 'block';
+  // Update order count
+  document.getElementById('orderCount').textContent = orders.length;
+}
+
+/* ═══ Init ═══ */
+/* PWA: Register Service Worker */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(reg => console.log('SW registered:', reg.scope))
+    .catch(err => console.log('SW registration failed:', err));
+}
+
+updateStats();
+updateFilterTags();
+renderCourses();
+// Check if user is already logged in
+if (currentUser) updateUserUI();
+// Show order query section if logged in
+if (currentUser) document.getElementById('orderQuerySection').style.display = 'block';
+
+/* ═══ PWA Install ═══ */
+let deferredPrompt;
+const installBanner = document.getElementById('installBanner');
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!sessionStorage.getItem('installDismissed')) {
+    installBanner.style.display = 'flex';
+    document.getElementById('installAppBtn').style.display = 'block';
+  }
+});
+function installApp() {
+  if (!deferredPrompt) { toast('请用手机浏览器打开本页，再点击安装', 'success'); return; }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(choice => {
+    if (choice.outcome === 'accepted') toast('正在安装 App... ✨', 'success');
+    deferredPrompt = null;
+    hideInstallBtn();
+  });
+}
+function hideInstallBtn() {
+  if (installBanner) installBanner.style.display = 'none';
+  sessionStorage.setItem('installDismissed', '1');
+}
+</script>
+</body>
+</html>
