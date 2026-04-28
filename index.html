@@ -526,6 +526,55 @@
     .admin-app-back-btn{display:flex;align-items:center;gap:6px;background:none;border:1px solid rgba(200,169,81,0.25);border-radius:20px;padding:6px 14px;color:var(--slate);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--transition)}
     .admin-app-back-btn:hover{border-color:var(--brass);color:var(--brass)}
 
+
+    /* ─── 后台招募统计卡片 ─── */
+    .recruit-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0 16px}
+    .recruit-stat-card{background:var(--navy);border-radius:var(--radius-md);padding:16px 20px;border:1px solid rgba(200,169,81,0.12);text-align:center;transition:var(--transition)}
+    .recruit-stat-card:hover{border-color:rgba(200,169,81,0.35)}
+    .recruit-stat-card.urgent{background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.2)}
+    .recruit-stat-card.pending{background:rgba(243,156,18,0.06);border-color:rgba(243,156,18,0.2)}
+    .recruit-stat-card.apps{background:rgba(39,174,96,0.06);border-color:rgba(39,174,96,0.2)}
+    .recruit-stat-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--brass);line-height:1}
+    .recruit-stat-card.urgent .recruit-stat-num{color:#E74C3C}
+    .recruit-stat-card.pending .recruit-stat-num{color:#F39C12}
+    .recruit-stat-card.apps .recruit-stat-num{color:#2ECC71}
+    .recruit-stat-label{font-size:12px;color:var(--slate);margin-top:4px;letter-spacing:.5px}
+    /* 待审横幅 */
+    .pending-banner{display:flex;align-items:center;gap:8px;background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:16px;color:#F39C12;font-size:13px;cursor:pointer;transition:var(--transition)}
+    .pending-banner:hover{background:rgba(243,156,18,0.18)}
+    .pending-banner svg:last-child{margin-left:auto}
+    .pending-banner strong{color:#fff}
+    /* ─── 前台发布招募按钮 ─── */
+    .pub-recruit-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(200,169,81,0.15);border:1px solid rgba(200,169,81,0.4);border-radius:20px;padding:6px 14px;color:var(--brass);font-size:12px;font-weight:600;cursor:pointer;transition:var(--transition);white-space:nowrap}
+    .pub-recruit-btn:hover{background:var(--brass);color:var(--navy-deep);border-color:var(--brass)}
+    /* ─── 前台投稿弹窗 ─── */
+    .pub-recruit-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(8px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
+    .pub-recruit-modal-overlay.show{display:flex}
+    .pub-recruit-modal{background:var(--navy);border:1px solid rgba(200,169,81,0.25);border-radius:var(--radius-lg);width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-float);animation:modal-in .25s ease}
+    @keyframes modal-in{from{opacity:0;transform:scale(.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .pub-recruit-modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 0;border-bottom:1px solid rgba(200,169,81,0.12);margin-bottom:0}
+    .pub-recruit-modal-title{display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ivory);padding-bottom:16px}
+    .pub-recruit-modal-title svg{color:var(--brass)}
+    .pub-recruit-close-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;color:var(--slate);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);flex-shrink:0;margin-bottom:8px}
+    .pub-recruit-close-btn:hover{background:rgba(231,76,60,0.15);color:#E74C3C}
+    .pub-recruit-notice{display:flex;align-items:center;gap:6px;background:rgba(52,152,219,0.1);border:1px solid rgba(52,152,219,0.25);border-radius:var(--radius-sm);padding:8px 16px;margin:16px 24px 0;font-size:12px;color:#5DADE2}
+    .pub-recruit-notice svg{flex-shrink:0}
+    .pub-recruit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;padding:16px 24px 0}
+    .pub-recruit-group{display:flex;flex-direction:column;gap:6px}
+    .pub-recruit-group.full{grid-column:1/-1}
+    .pub-recruit-label{font-size:12px;font-weight:600;color:var(--slate);letter-spacing:.5px}
+    .pub-recruit-label span{color:#E74C3C}
+    .pub-recruit-input,.pub-recruit-select,.pub-recruit-textarea{background:var(--navy-light);border:1px solid rgba(200,169,81,0.18);border-radius:var(--radius-sm);padding:10px 14px;color:var(--ivory);font-size:13px;font-family:'DM Sans',sans-serif;transition:var(--transition);width:100%;outline:none}
+    .pub-recruit-input:focus,.pub-recruit-select:focus,.pub-recruit-textarea:focus{border-color:var(--brass);background:rgba(200,169,81,0.05)}
+    .pub-recruit-input::placeholder,.pub-recruit-textarea::placeholder{color:var(--slate);opacity:.6}
+    .pub-recruit-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237B94B0' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+    .pub-recruit-textarea{resize:vertical;min-height:72px}
+    .pub-recruit-footer{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:16px 24px 20px;border-top:1px solid rgba(200,169,81,0.1);margin-top:16px}
+    .pub-recruit-cancel-btn{padding:10px 20px;border-radius:var(--radius-sm);background:transparent;border:1px solid rgba(200,169,81,0.2);color:var(--slate);font-size:13px;font-weight:500;cursor:pointer;transition:var(--transition)}
+    .pub-recruit-cancel-btn:hover{background:rgba(255,255,255,0.05);color:var(--ivory)}
+    .pub-recruit-submit-btn{display:flex;align-items:center;gap:7px;padding:10px 22px;border-radius:var(--radius-sm);background:var(--brass);border:none;color:var(--navy-deep);font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition)}
+    .pub-recruit-submit-btn:hover{background:var(--brass-light);transform:translateY(-1px);box-shadow:0 4px 16px rgba(200,169,81,0.35)}
+
   </style>
 </head>
 <body>
@@ -663,7 +712,13 @@
 <section class="recruit-section" id="recruitSection">
   <div class="recruit-section-header">
     <div class="recruit-section-title">船员招募</div>
-    <div class="recruit-count" id="recruitCount">0 个职位</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="recruit-count" id="recruitCount">0 个职位</div>
+      <button class="pub-recruit-btn" onclick="showPublicRecruitForm()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        发布招募
+      </button>
+    </div>
   </div>
   <div class="recruit-grid" id="recruitGrid"></div>
   <div class="recruit-empty-state" id="recruitEmptyState">
@@ -1802,6 +1857,19 @@ function switchRecruitAdminView(view) {
 function renderAdminRecruitList() {
   const list = document.getElementById('adminRecruitListItems');
   document.getElementById('adminRecruitCount').textContent = RECRUITS.length;
+  var urgent = RECRUITS.filter(function(r) { return r.urgent; }).length;
+  document.getElementById('adminRecruitUrgentCount').textContent = urgent;
+  var subs = JSON.parse(localStorage.getItem('recruit_submissions') || '[]');
+  var pending = subs.filter(function(s) { return s.status === 'pending'; }).length;
+  document.getElementById('adminRecruitPendingCount').textContent = pending;
+  var apps = JSON.parse(localStorage.getItem('recruitment_apps') || '[]');
+  document.getElementById('adminAppCountStat').textContent = apps.length;
+  var banner = document.getElementById('pendingSubmissionBanner');
+  if (banner) {
+    banner.style.display = pending > 0 ? 'flex' : 'none';
+    var pct = document.getElementById('pendingCountText');
+    if (pct) pct.textContent = pending;
+  }
   if (!RECRUITS.length) {
     list.innerHTML = '<div class="admin-recruit-empty">暂无招聘信息，点击"新增职位"添加</div>';
     return;
@@ -1824,6 +1892,60 @@ function renderAdminRecruitList() {
       </div>
     </div>
   `).join('');
+}
+
+
+// ═══ 前台发布招募投稿 ═══
+function showPublicRecruitForm() {
+  document.getElementById('pubRecruitModal').classList.add('show');
+  document.getElementById('pubShipName').value = '';
+  document.getElementById('pubShipType').value = '';
+  document.getElementById('pubRoute').value = '';
+  document.getElementById('pubDuration').value = '';
+  document.getElementById('pubVoyage').value = '';
+  document.getElementById('pubContact').value = '';
+  document.getElementById('pubDesc').value = '';
+  document.getElementById('pubRequirement').value = '';
+  document.getElementById('pubShipName').focus();
+  document.body.style.overflow = 'hidden';
+}
+function closePublicRecruitForm() {
+  document.getElementById('pubRecruitModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePublicRecruitForm();
+});
+function submitPublicRecruit() {
+  var shipName = document.getElementById('pubShipName').value.trim();
+  var shipType = document.getElementById('pubShipType').value.trim();
+  var route = document.getElementById('pubRoute').value.trim();
+  var duration = document.getElementById('pubDuration').value.trim();
+  var voyage = document.getElementById('pubVoyage').value.trim();
+  var contact = document.getElementById('pubContact').value.trim();
+  var desc = document.getElementById('pubDesc').value.trim();
+  var requirement = document.getElementById('pubRequirement').value.trim();
+  if (!shipName || !shipType || !route || !duration || !voyage || !contact || !desc) {
+    toast('请填写所有必填项', 'error');
+    return;
+  }
+  var subs = JSON.parse(localStorage.getItem('recruit_submissions') || '[]');
+  subs.unshift({
+    id: Date.now(),
+    shipName: shipName,
+    shipType: shipType,
+    route: route,
+    duration: duration,
+    voyage: voyage,
+    contact: contact,
+    desc: desc,
+    requirement: requirement,
+    submittedAt: new Date().toLocaleString('zh-CN'),
+    status: 'pending'
+  });
+  localStorage.setItem('recruit_submissions', JSON.stringify(subs));
+  closePublicRecruitForm();
+  toast('提交成功！等待管理员审核', 'success');
 }
 
 function showRecruitAddForm() {
@@ -1906,6 +2028,73 @@ function confirmRecruitDelete() {
 }
 
 /* Admin Applications */
+
+// ═══ 管理员审核船员投稿 ═══
+function renderAdminSubmissions() {
+  var subs = JSON.parse(localStorage.getItem('recruit_submissions') || '[]');
+  document.getElementById('adminSubmissionCount').textContent = subs.length;
+  var list = document.getElementById('adminSubmissionList');
+  var empty = document.getElementById('adminSubmissionEmpty');
+  if (!subs.length) {
+    list.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  list.style.display = 'block';
+  empty.style.display = 'none';
+  list.innerHTML = subs.map(function(s) {
+    var statusMap = {'pending':'待审核','approved':'已通过','rejected':'已拒绝'};
+    var statusClass = {'pending':'status-pending','approved':'status-approved','rejected':'status-rejected'};
+    var statusBtn = '';
+    if (s.status === 'pending') {
+      statusBtn = '<button class="sub-approve-btn" onclick="approveSubmission(' + s.id + ')">通过</button><button class="sub-reject-btn" onclick="rejectSubmission(' + s.id + ')">拒绝</button>';
+    } else {
+      statusBtn = '<span class="sub-status-tag ' + statusClass[s.status] + '">' + statusMap[s.status] + '</span>';
+    }
+    return '<div class="sub-item"><div class="sub-stripe ' + (s.status === 'rejected' ? 'rejected' : s.status === 'approved' ? 'approved' : '') + '"></div><div class="sub-body"><div class="sub-top"><div class="sub-ship">' + s.shipName + '</div><div class="sub-badge ' + statusClass[s.status] + '">' + statusMap[s.status] + '</div></div><div class="sub-meta"><span>' + s.shipType + '</span><span>' + s.route + '</span><span>' + s.duration + '</span></div><div class="sub-desc">' + s.desc + '</div><div class="sub-contact">联系方式：' + s.contact + '</div><div class="sub-time">提交时间：' + s.submittedAt + '</div><div class="sub-actions">' + statusBtn + '<button class="sub-del-btn" onclick="deleteSubmission(' + s.id + ')">删除</button></div></div></div>';
+  }).join('');
+}
+function approveSubmission(id) {
+  var subs = JSON.parse(localStorage.getItem('recruit_submissions') || '[]');
+  var idx = subs.findIndex(function(s) { return s.id === id; });
+  if (idx < 0) return;
+  var sub = subs[idx];
+  sub.status = 'approved';
+  var newId = Math.max.apply(null, [0].concat(RECRUITS.map(function(r) { return r.id; }))) + 1;
+  RECRUITS.push({
+    id: newId,
+    shipName: sub.shipName,
+    shipType: sub.shipType,
+    route: sub.route,
+    voyage: sub.voyage,
+    duration: sub.duration,
+    urgent: false,
+    desc: sub.desc,
+    requirement: sub.requirement
+  });
+  localStorage.setItem('recruit_submissions', JSON.stringify(subs));
+  localStorage.setItem('recruitments', JSON.stringify(RECRUITS));
+  renderAdminSubmissions();
+  renderRecruitList();
+  toast('已通过！招募信息已发布', 'success');
+}
+function rejectSubmission(id) {
+  var subs = JSON.parse(localStorage.getItem('recruit_submissions') || '[]');
+  var idx = subs.findIndex(function(s) { return s.id === id; });
+  if (idx < 0) return;
+  subs[idx].status = 'rejected';
+  localStorage.setItem('recruit_submissions', JSON.stringify(subs));
+  renderAdminSubmissions();
+  toast('已拒绝', 'info');
+}
+function deleteSubmission(id) {
+  var subs = JSON.parse(localStorage.getItem('recruit_submissions') || '[]');
+  subs = subs.filter(function(s) { return s.id !== id; });
+  localStorage.setItem('recruit_submissions', JSON.stringify(subs));
+  renderAdminSubmissions();
+  toast('已删除', 'info');
+}
+
 function renderAdminApplications() {
   const apps = loadApplications();
   const list = document.getElementById('adminAppList');
