@@ -620,6 +620,39 @@
   </div>
 </div>
 
+<!-- iOS Install Guide Modal -->
+<div id="iosInstallGuide" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);justify-content:center;align-items:center;padding:20px">
+  <div style="background:var(--navy);border-radius:16px;max-width:340px;width:100%;padding:24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);border:1px solid rgba(200,169,81,0.2)">
+    <div style="font-size:48px;margin-bottom:16px">📲</div>
+    <h3 style="color:var(--ivory);font-size:18px;margin:0 0 12px;font-weight:600">添加到主屏幕</h3>
+    <p style="color:var(--slate);font-size:13px;line-height:1.6;margin:0 0 20px">在 iPhone/iPad 上安装 App，请按以下步骤操作：</p>
+    <div style="text-align:left;background:rgba(0,0,0,0.3);border-radius:12px;padding:16px;margin-bottom:20px">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px">
+        <span style="background:var(--gold);color:var(--navy);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">1</span>
+        <div>
+          <div style="color:var(--ivory);font-size:13px;font-weight:500">点击分享按钮</div>
+          <div style="color:var(--slate);font-size:11px;margin-top:2px">Safari 底部的 <span style="color:var(--gold)">□↑</span> 图标</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px">
+        <span style="background:var(--gold);color:var(--navy);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">2</span>
+        <div>
+          <div style="color:var(--ivory);font-size:13px;font-weight:500">选择「添加到主屏幕」</div>
+          <div style="color:var(--slate);font-size:11px;margin-top:2px">在弹出的菜单中找到该选项</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <span style="background:var(--gold);color:var(--navy);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">3</span>
+        <div>
+          <div style="color:var(--ivory);font-size:13px;font-weight:500">点击右上角「添加」</div>
+          <div style="color:var(--slate);font-size:11px;margin-top:2px">完成安装，桌面会出现图标</div>
+        </div>
+      </div>
+    </div>
+    <button onclick="closeIosGuide()" style="width:100%;background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer">我知道了</button>
+  </div>
+</div>
+
 <style>
 /* Mobile: shrink banner buttons on small screens */
 @media (max-width: 420px) {
@@ -2374,6 +2407,9 @@ const installBanner = document.getElementById('installBanner');
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 // Detect if in WeChat mini browser
 const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
+// Detect iOS
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
 // Only show install banner on mobile devices
 if (isMobile && !sessionStorage.getItem('installDismissed')) {
   installBanner.style.display = 'flex';
@@ -2383,8 +2419,15 @@ if (isMobile && !sessionStorage.getItem('installDismissed')) {
     openBtn.style.display = 'block';
     openBtn.textContent = '在浏览器打开';
     openBtn.style.background = '#1890ff';
+  } else if (isIOS) {
+    // iOS: show install guide button
+    const openBtn = document.getElementById('installAppBtn');
+    openBtn.style.display = 'block';
+    openBtn.textContent = '安装指引';
+    openBtn.style.background = 'var(--gold)';
+    openBtn.style.color = 'var(--navy)';
   }
-  // 非微信：初始隐藏按钮，等 beforeinstallprompt 触发后再显示
+  // Android: 初始隐藏按钮，等 beforeinstallprompt 触发后再显示
 } else {
   // Desktop: hide banner completely
   if (installBanner) installBanner.style.display = 'none';
@@ -2398,17 +2441,23 @@ window.addEventListener('beforeinstallprompt', e => {
     openBtn.style.display = 'block';
     openBtn.textContent = '立即安装';
     openBtn.style.background = '#07C160';
+    openBtn.style.color = '#fff';
   }
 });
 function installApp() {
+  const ua = navigator.userAgent.toLowerCase();
+  if (/micromessenger/i.test(ua)) {
+    // WeChat
+    toast('请点击右上角 ··· ，选择"在浏览器打开"后安装', 'success');
+    return;
+  }
+  if (isIOS && !deferredPrompt) {
+    // iOS: show install guide
+    document.getElementById('iosInstallGuide').style.display = 'flex';
+    return;
+  }
   if (!deferredPrompt) {
-    // No install prompt support: guide user to open in system browser
-    const ua = navigator.userAgent.toLowerCase();
-    if (/micromessenger/i.test(ua)) {
-      toast('请点击右上角 ··· ，选择"在浏览器打开"后安装', 'success');
-    } else {
-      toast('请用手机系统浏览器打开本页，再点击安装', 'success');
-    }
+    toast('请用手机系统浏览器打开本页，再点击安装', 'success');
     return;
   }
   deferredPrompt.prompt();
@@ -2417,6 +2466,10 @@ function installApp() {
     deferredPrompt = null;
     hideInstallBtn();
   });
+}
+function closeIosGuide() {
+  document.getElementById('iosInstallGuide').style.display = 'none';
+  hideInstallBtn();
 }
 function hideInstallBtn() {
   if (installBanner) installBanner.style.display = 'none';
