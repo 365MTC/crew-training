@@ -850,6 +850,125 @@
         <button class="admin-tab" data-tab="settings" onclick="switchAdminTab('settings')">⚙️ 全局设置</button>
       </div>
 
+      <!-- ─── Recruit Management Views ─── -->
+      <div id="adminRecruitView" style="display:none">
+        <div class="admin-recruit-header">
+          <div class="admin-recruit-title">船员招募管理</div>
+          <div style="display:flex;gap:8px">
+            <button class="admin-add-btn" style="background:rgba(46,204,113,0.15);border:1px solid rgba(46,204,113,0.3);color:#2ECC71" onclick="switchRecruitAdminView('apps')">&#128229; 查看申请</button>
+            <button class="admin-add-btn" onclick="showRecruitAddForm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>新增职位</button>
+          </div>
+        </div>
+        <!-- 统计卡片 -->
+        <div class="recruit-stats-row">
+          <div class="recruit-stat-card">
+            <div class="recruit-stat-num" id="adminRecruitCount">0</div>
+            <div class="recruit-stat-label">全部职位</div>
+          </div>
+          <div class="recruit-stat-card urgent">
+            <div class="recruit-stat-num" id="adminRecruitUrgentCount">0</div>
+            <div class="recruit-stat-label">紧急招聘</div>
+          </div>
+          <div class="recruit-stat-card pending">
+            <div class="recruit-stat-num" id="adminRecruitPendingCount">0</div>
+            <div class="recruit-stat-label">待审投稿</div>
+          </div>
+          <div class="recruit-stat-card apps">
+            <div class="recruit-stat-num" id="adminAppCountStat">0</div>
+            <div class="recruit-stat-label">求职申请</div>
+          </div>
+        </div>
+        <!-- 待审投稿提示 -->
+        <div id="pendingSubmissionBanner" style="display:none" class="pending-banner" onclick="switchRecruitAdminView('submissions')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          有 <strong id="pendingCountText">0</strong> 条船员投稿待审核，点击查看
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <!-- Recruit List -->
+        <div id="adminRecruitList">
+          <div class="admin-recruit-list" id="adminRecruitListItems"></div>
+        </div>
+        <!-- Submissions Review View -->
+        <div id="adminSubmissionsView" style="display:none">
+          <div class="admin-app-header">
+            <div class="admin-app-title">船员投稿审核 <span class="count" id="adminSubmissionCount">0</span></div>
+            <button class="admin-back-btn" onclick="switchRecruitAdminView('list')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>返回职位列表</button>
+          </div>
+          <div class="admin-app-list" id="adminSubmissionList"></div>
+          <div class="admin-app-empty" id="adminSubmissionEmpty" style="display:none">暂无待审投稿</div>
+        </div>
+        <!-- Applications View -->
+        <div id="adminAppsView" style="display:none">
+          <div class="admin-app-header">
+            <div class="admin-app-title">求职申请 <span class="count" id="adminAppCount">0</span></div>
+            <button class="admin-back-btn" onclick="switchRecruitAdminView('list')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>返回职位列表</button>
+          </div>
+          <div class="admin-app-list" id="adminAppList"></div>
+          <div class="admin-app-empty" id="adminAppEmpty" style="display:none">暂无求职申请</div>
+        </div>
+        <!-- App Detail View -->
+        <div id="adminAppDetailView" style="display:none"></div>
+        <!-- Recruit Form View -->
+        <div id="adminRecruitForm" class="admin-form" style="display:none">
+          <div class="admin-form-header">
+            <div class="admin-form-title" id="adminRecruitFormTitle">新增招募职位</div>
+            <button class="admin-back-btn" onclick="switchRecruitAdminView('list')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>返回列表</button>
+          </div>
+          <div class="admin-recruit-grid">
+            <div class="admin-recruit-group full">
+              <label class="admin-label">船舶名称 <span>*</span></label>
+              <input class="admin-input" type="text" id="rfShipName" placeholder="如：海盛号 MV HAISHENG" />
+            </div>
+            <div class="admin-recruit-group">
+              <label class="admin-label">船舶类型 <span>*</span></label>
+              <select class="admin-input" id="rfShipType">
+                <option value="">请选择</option>
+                <option>散货船</option><option>集装箱船</option><option>油轮</option>
+                <option>化学品船</option><option>客轮</option><option>渔船</option>
+                <option>拖轮</option><option>其他</option>
+              </select>
+            </div>
+            <div class="admin-recruit-group">
+              <label class="admin-label">航线/区域 <span>*</span></label>
+              <input class="admin-input" type="text" id="rfRoute" placeholder="如：远洋 / 东南亚 / 沿海" />
+            </div>
+            <div class="admin-recruit-group">
+              <label class="admin-label">船期信息 <span>*</span></label>
+              <input class="admin-input" type="text" id="rfVoyage" placeholder="如：上船日期：5月15日 | 下船日期：11月20日" />
+            </div>
+            <div class="admin-recruit-group">
+              <label class="admin-label">合同期限 <span>*</span></label>
+              <input class="admin-input" type="text" id="rfDuration" placeholder="如：6个月 / 8个月" />
+            </div>
+            <div class="admin-recruit-group full">
+              <label class="admin-label">职位描述与福利</label>
+              <textarea class="admin-input" id="rfDesc" rows="3" placeholder="简要描述职位特点、福利待遇、食宿安排等"></textarea>
+            </div>
+            <div class="admin-recruit-group full">
+              <label class="admin-label">任职要求</label>
+              <textarea class="admin-input" id="rfRequirement" rows="2" placeholder="选填：任职资格要求，如证书、经验等"></textarea>
+            </div>
+            <div class="admin-recruit-group">
+              <label class="admin-label">联系方式</label>
+              <input class="admin-input" type="text" id="rfContact" placeholder="手机号、微信号或邮箱" />
+            </div>
+            <div class="admin-recruit-group">
+              <label class="admin-label">
+                <input type="checkbox" id="rfUrgent" style="margin-right:6px;accent-color:var(--brass)" />
+                标记为紧急招聘
+              </label>
+            </div>
+          </div>
+          <div class="admin-form-footer">
+            <button class="admin-cancel-btn" onclick="switchRecruitAdminView('list')">取消</button>
+            <button class="admin-submit-btn" onclick="saveRecruitForm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>保存职位</button>
+          </div>
+        </div>
+        <!-- Recruit Confirm View -->
+        <div id="adminRecruitConfirm" style="display:none"></div>
+      </div>
+      <!-- ─── Course Management Views ─── -->
+      <div id="adminListView">
       <!-- ─── Course Management Views ─── -->
       <div id="adminListView">
         <div class="admin-list-header">
@@ -1850,13 +1969,28 @@ function switchRecruitAdminView(view) {
   document.getElementById('adminRecruitConfirm').classList.toggle('show', view === 'confirm');
   document.getElementById('adminAppsView').style.display = view === 'apps' ? 'block' : 'none';
   document.getElementById('adminAppDetailView').style.display = view === 'app-detail' ? 'block' : 'none';
+  document.getElementById('adminSubmissionsView').style.display = view === 'submissions' ? 'block' : 'none';
   if (view === 'list') renderAdminRecruitList();
   if (view === 'apps') renderAdminApplications();
+  if (view === 'submissions') renderAdminSubmissions();
 }
 
 function renderAdminRecruitList() {
   const list = document.getElementById('adminRecruitListItems');
   document.getElementById('adminRecruitCount').textContent = RECRUITS.length;
+  var urgent = RECRUITS.filter(function(r) { return r.urgent; }).length;
+  document.getElementById('adminRecruitUrgentCount').textContent = urgent;
+  var subs = JSON.parse(localStorage.getItem('recruit_submissions') || '[]');
+  var pending = subs.filter(function(s) { return s.status === 'pending'; }).length;
+  document.getElementById('adminRecruitPendingCount').textContent = pending;
+  var apps = JSON.parse(localStorage.getItem('recruitment_apps') || '[]');
+  document.getElementById('adminAppCountStat').textContent = apps.length;
+  var banner = document.getElementById('pendingSubmissionBanner');
+  if (banner) {
+    banner.style.display = pending > 0 ? 'flex' : 'none';
+    var pct = document.getElementById('pendingCountText');
+    if (pct) pct.textContent = pending;
+  }
   var urgent = RECRUITS.filter(function(r) { return r.urgent; }).length;
   document.getElementById('adminRecruitUrgentCount').textContent = urgent;
   var subs = JSON.parse(localStorage.getItem('recruit_submissions') || '[]');
