@@ -372,6 +372,160 @@
     .settings-preview-label{font-size:12px;color:var(--slate);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px}
     .settings-preview-img{width:200px;height:200px;margin:0 auto;background:#fff;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
     .settings-preview-img img{max-width:100%;max-height:100%;object-fit:contain}
+
+    /* ══════════════════════════════════════════════════════ */
+    /* ─── SHIP RECRUITMENT MODULE ─── */
+    /* ══════════════════════════════════════════════════════ */
+    .main-tabs{display:flex;justify-content:center;margin:32px 0 0;gap:8px}
+    .main-tab-btn{display:flex;align-items:center;gap:8px;padding:10px 28px;border-radius:24px;border:1px solid rgba(200,169,81,0.25);background:transparent;color:var(--slate);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:var(--transition)}
+    .main-tab-btn:hover{border-color:var(--brass);color:var(--brass-light)}
+    .main-tab-btn.active{background:var(--brass);border-color:var(--brass);color:var(--navy-deep);font-weight:700}
+    .recruit-section{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 40px 80px;display:none}
+    .recruit-section.show{display:block}
+    .recruit-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .recruit-section-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ivory);display:flex;align-items:center;gap:10px}
+    .recruit-section-title::before{content:'';width:4px;height:22px;background:var(--brass);border-radius:2px}
+    .recruit-count{font-size:13px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+    .recruit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .recruit-card{background:var(--navy);border-radius:var(--radius-lg);overflow:hidden;border:1px solid rgba(200,169,81,0.1);box-shadow:var(--shadow-card);transition:var(--transition);opacity:0;transform:translateY(30px)}
+    .recruit-card.visible{opacity:1;transform:translateY(0)}
+    .recruit-card:hover{transform:translateY(-6px);border-color:rgba(200,169,81,0.4);box-shadow:0 16px 48px rgba(0,0,0,0.45)}
+    .recruit-card-stripe{height:4px;background:linear-gradient(90deg,var(--brass),var(--navy-mid))}
+    .recruit-card-body{padding:20px}
+    .recruit-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+    .recruit-ship-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--ivory);line-height:1.3;flex:1;margin-right:10px}
+    .recruit-badge{display:flex;align-items:center;gap:4px;font-size:10px;letter-spacing:.5px;padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+    .recruit-badge.urgent{background:rgba(231,76,60,0.15);color:#E74C3C;border:1px solid rgba(231,76,60,0.3)}
+    .recruit-badge.normal{background:rgba(46,204,113,0.12);color:#2ECC71;border:1px solid rgba(46,204,113,0.25)}
+    .recruit-badge.hiring{background:rgba(200,169,81,0.12);color:var(--brass);border:1px solid rgba(200,169,81,0.2)}
+    .recruit-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+    .recruit-meta-tag{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--slate);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:3px 8px;font-family:'JetBrains Mono',monospace}
+    .recruit-desc{font-size:12px;color:var(--slate);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:14px}
+    .recruit-divider{height:1px;background:rgba(255,255,255,0.06);margin-bottom:14px}
+    .recruit-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px}
+    .recruit-row-label{color:var(--slate);display:flex;align-items:center;gap:4px}
+    .recruit-row-value{color:var(--ivory);font-weight:500;font-family:'JetBrains Mono',monospace}
+    .recruit-salary{color:var(--brass) !important;font-size:15px !important;font-weight:700 !important}
+    .recruit-apply-btn{width:100%;margin-top:16px;padding:11px;background:var(--brass);border:none;border-radius:20px;color:var(--navy-deep);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px}
+    .recruit-apply-btn:hover{background:var(--brass-light);transform:scale(1.02)}
+    .recruit-apply-btn:active{transform:scale(0.98)}
+    .recruit-empty-state{text-align:center;padding:80px 20px;display:none}
+    .recruit-empty-state.show{display:block}
+    .recruit-empty-icon{width:80px;height:80px;margin:0 auto 20px;color:var(--slate);opacity:.5}
+    .recruit-empty-state h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--ivory);margin-bottom:10px}
+    .recruit-empty-state p{color:var(--slate);margin-bottom:24px;font-size:14px}
+    .recruit-modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(5,15,30,0.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+    .recruit-modal-overlay.open{opacity:1;pointer-events:all}
+    .recruit-modal{background:var(--parchment);border-radius:var(--radius-lg);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-float);transform:translateY(40px) scale(.97);transition:transform .35s cubic-bezier(.34,1.56,.64,1);position:relative}
+    .recruit-modal-overlay.open .recruit-modal{transform:translateY(0) scale(1)}
+    .recruit-modal-header{padding:28px 32px 20px;border-bottom:1px solid rgba(11,25,41,0.1);position:relative}
+    .recruit-modal-close{position:absolute;top:20px;right:20px;width:32px;height:32px;border-radius:50%;border:1px solid rgba(11,25,41,0.15);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6B7A8D;transition:var(--transition)}
+    .recruit-modal-close:hover{background:rgba(11,25,41,0.08)}
+    .recruit-modal-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--slate);margin-bottom:8px}
+    .recruit-modal-ship{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--navy-deep);line-height:1.3}
+    .recruit-modal-divider{display:flex;align-items:center;gap:12px;padding:0 32px;margin:16px 0}
+    .recruit-modal-divider-line{flex:1;height:1px;background:rgba(11,25,41,0.1)}
+    .recruit-modal-body{padding:24px 32px 32px}
+    .recruit-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+    .recruit-form-group{position:relative}
+    .recruit-form-group.full{grid-column:1/-1}
+    .recruit-form-label{display:block;font-size:12px;font-weight:500;color:#4A5568;margin-bottom:6px;letter-spacing:.3px}
+    .recruit-form-label span{color:var(--coral);margin-left:2px}
+    .recruit-form-input{width:100%;padding:12px 16px;border:1.5px solid #D1D5DB;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--navy-deep);background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s}
+    .recruit-form-input:focus{border-color:var(--navy-mid);box-shadow:0 0 0 3px rgba(27,58,92,0.1)}
+    .recruit-form-input.error{border-color:var(--coral)}
+    .recruit-form-error{font-size:11px;color:var(--coral);margin-top:4px;display:none;align-items:center;gap:4px}
+    .recruit-form-group.has-error .recruit-form-error{display:flex}
+    .recruit-submit{width:100%;margin-top:24px;padding:14px;background:var(--navy-deep);color:var(--brass);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+    .recruit-submit:hover{background:var(--navy);transform:translateY(-2px)}
+    .recruit-submit:active{transform:scale(.98)}
+    .recruit-success-screen{text-align:center;padding:40px 32px;display:none}
+    .recruit-success-screen.show{display:block}
+    .recruit-success-icon-wrap{width:72px;height:72px;margin:0 auto 20px;background:rgba(46,204,113,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:success-pop .5s cubic-bezier(.34,1.56,.64,1) both}
+    .recruit-success-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy-deep);margin-bottom:10px}
+    .recruit-success-desc{font-size:14px;color:#6B7A8D;margin-bottom:28px;line-height:1.6}
+    .recruit-success-ticket{background:var(--navy-deep);border-radius:var(--radius-md);padding:20px 24px;margin-bottom:24px;text-align:left}
+    .recruit-success-ticket-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--brass);margin-bottom:8px}
+    .recruit-success-ticket-code{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;color:var(--ivory);letter-spacing:3px}
+    .recruit-success-ticket-row{display:flex;justify-content:space-between;font-size:12px;color:var(--slate);margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08)}
+    .recruit-success-ticket-row span:last-child{color:var(--ivory);font-family:'JetBrains Mono',monospace}
+    .recruit-success-close-btn{display:inline-block;padding:12px 32px;border:1.5px solid var(--navy-deep);color:var(--navy-deep);border-radius:28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;background:none;transition:var(--transition)}
+    .recruit-success-close-btn:hover{background:var(--navy-deep);color:var(--brass)}
+    .admin-recruit-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .admin-recruit-title{font-size:14px;font-weight:600;color:var(--ivory);display:flex;align-items:center;gap:8px}
+    .admin-recruit-title .count{background:var(--brass);color:var(--navy-deep);font-size:11px;font-weight:700;border-radius:10px;padding:2px 8px;font-family:'JetBrains Mono',monospace}
+    .admin-recruit-add-btn{display:flex;align-items:center;gap:6px;background:var(--brass);color:var(--navy-deep);border:none;border-radius:20px;padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition)}
+    .admin-recruit-add-btn:hover{background:var(--brass-light);transform:scale(1.03)}
+    .admin-recruit-list{display:flex;flex-direction:column;gap:12px}
+    .admin-recruit-item{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(200,169,81,0.1);border-radius:var(--radius-md);padding:14px 16px;transition:var(--transition)}
+    .admin-recruit-item:hover{border-color:rgba(200,169,81,0.3);background:rgba(255,255,255,0.05)}
+    .admin-recruit-stripe{width:4px;height:48px;border-radius:2px;flex-shrink:0;background:var(--brass)}
+    .admin-recruit-info{flex:1;min-width:0}
+    .admin-recruit-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .admin-recruit-meta{display:flex;align-items:center;gap:10px;margin-top:4px;font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+    .admin-recruit-actions{display:flex;gap:8px;flex-shrink:0}
+    .admin-recruit-empty{text-align:center;padding:60px 20px;color:var(--slate);font-size:14px}
+    .admin-recruit-form{display:none}.admin-recruit-form.show{display:block}
+    .admin-recruit-form-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .admin-recruit-form-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ivory)}
+    .admin-recruit-back-btn{display:flex;align-items:center;gap:6px;background:none;border:1px solid rgba(200,169,81,0.25);border-radius:20px;padding:6px 14px;color:var(--slate);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--transition)}
+    .admin-recruit-back-btn:hover{border-color:var(--brass);color:var(--brass)}
+    .admin-recruit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+    .admin-recruit-group{display:flex;flex-direction:column;gap:6px}
+    .admin-recruit-group.full{grid-column:1/-1}
+    .admin-recruit-label{font-size:12px;font-weight:500;color:var(--slate);letter-spacing:.3px}
+    .admin-recruit-label span{color:var(--coral)}
+    .admin-recruit-input{width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(200,169,81,0.2);border-radius:var(--radius-sm);color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+    .admin-recruit-input:focus{border-color:var(--brass)}
+    .admin-recruit-input::placeholder{color:rgba(123,148,176,0.6)}
+    .admin-recruit-textarea{width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(200,169,81,0.2);border-radius:var(--radius-sm);color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:vertical;min-height:80px;transition:border-color .2s}
+    .admin-recruit-textarea:focus{border-color:var(--brass)}
+    .admin-recruit-select{appearance:none;width:100%;padding:10px 32px 10px 14px;background:rgba(255,255,255,0.05) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237B94B0' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;border:1.5px solid rgba(200,169,81,0.2);border-radius:var(--radius-sm);color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+    .admin-recruit-select:focus{border-color:var(--brass)}
+    .admin-recruit-select option{background:var(--navy);color:var(--ivory)}
+    .admin-recruit-checkbox-label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--slate);cursor:pointer}
+    .admin-recruit-checkbox-label input[type="checkbox"]{width:18px;height:18px;accent-color:var(--brass)}
+    .admin-recruit-save-btn{width:100%;margin-top:24px;padding:13px;background:var(--brass);color:var(--navy-deep);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+    .admin-recruit-save-btn:hover{background:var(--brass-light)}
+    .admin-recruit-confirm{display:none;text-align:center;padding:40px 20px}
+    .admin-recruit-confirm.show{display:block}
+    .admin-recruit-confirm-icon{width:56px;height:56px;margin:0 auto 16px;background:rgba(231,76,60,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center}
+    .admin-recruit-confirm h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--ivory);margin-bottom:8px}
+    .admin-recruit-confirm p{color:var(--slate);font-size:14px;margin-bottom:24px}
+    .admin-app-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .admin-app-title{font-size:14px;font-weight:600;color:var(--ivory);display:flex;align-items:center;gap:8px}
+    .admin-app-title .count{background:var(--brass);color:var(--navy-deep);font-size:11px;font-weight:700;border-radius:10px;padding:2px 8px;font-family:'JetBrains Mono',monospace}
+    .admin-app-list{display:flex;flex-direction:column;gap:10px}
+    .admin-app-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(200,169,81,0.1);border-radius:var(--radius-md);padding:12px 16px;transition:var(--transition);cursor:pointer}
+    .admin-app-item:hover{border-color:rgba(200,169,81,0.25)}
+    .admin-app-avatar{width:36px;height:36px;border-radius:50%;background:var(--brass-dim);border:1px solid rgba(200,169,81,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--brass);font-weight:700;flex-shrink:0}
+    .admin-app-info{flex:1;min-width:0}
+    .admin-app-name{font-size:13px;font-weight:600;color:var(--ivory)}
+    .admin-app-meta{display:flex;gap:10px;margin-top:3px;font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+    .admin-app-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+    .admin-app-status{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600}
+    .admin-app-status.pending{background:rgba(243,156,18,0.15);color:#F39C12;border:1px solid rgba(243,156,18,0.3)}
+    .admin-app-status.reviewed{background:rgba(46,204,113,0.15);color:#2ECC71;border:1px solid rgba(46,204,113,0.3)}
+    .admin-app-status.rejected{background:rgba(231,76,60,0.15);color:#E74C3C;border:1px solid rgba(231,76,60,0.3)}
+    .admin-app-delete{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.25);border-radius:6px;padding:5px 8px;color:var(--coral);cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center}
+    .admin-app-delete:hover{background:rgba(231,76,60,0.25)}
+    .admin-app-empty{text-align:center;padding:60px 20px;color:var(--slate);font-size:14px}
+    .admin-app-detail-card{background:rgba(255,255,255,0.03);border:1px solid rgba(200,169,81,0.12);border-radius:var(--radius-md);padding:20px;margin-bottom:16px}
+    .admin-app-detail-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+    .admin-app-detail-row:last-child{border-bottom:none}
+    .admin-app-detail-label{color:var(--slate)}
+    .admin-app-detail-value{color:var(--ivory);font-family:'JetBrains Mono',monospace;font-weight:500}
+    .admin-app-actions-row{display:flex;gap:10px;margin-top:16px}
+    .admin-app-action-btn{flex:1;padding:10px;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition);border:none}
+    .admin-app-action-btn.reject{background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.3);color:#E74C3C}
+    .admin-app-action-btn.reject:hover{background:rgba(231,76,60,0.3)}
+    .admin-app-action-btn.accept{background:var(--sea-foam);color:#fff}
+    .admin-app-action-btn.accept:hover{background:#27ae60}
+    .admin-app-action-btn.back{background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,81,0.2);color:var(--slate)}
+    .admin-app-action-btn.back:hover{border-color:var(--brass);color:var(--brass)}
+    .admin-app-back-btn{display:flex;align-items:center;gap:6px;background:none;border:1px solid rgba(200,169,81,0.25);border-radius:20px;padding:6px 14px;color:var(--slate);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--transition)}
+    .admin-app-back-btn:hover{border-color:var(--brass);color:var(--brass)}
+
   </style>
 </head>
 <body>
@@ -480,6 +634,18 @@
   </div>
 </section>
 
+<!-- Main Tab Switcher -->
+<div class="main-tabs">
+  <button class="main-tab-btn active" id="tabCourses" onclick="switchMainTab('courses')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    培训课程
+  </button>
+  <button class="main-tab-btn" id="tabRecruit" onclick="switchMainTab('recruit')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+    船员招募
+  </button>
+</div>
+
 <!-- Order Query Section -->
 <section class="order-query-section" id="orderQuerySection" style="display:none">
   <div class="order-query-card">
@@ -493,7 +659,21 @@
   </div>
 </section>
 
-<!-- Filter -->
+<!-- Recruitment Section -->
+<section class="recruit-section" id="recruitSection">
+  <div class="recruit-section-header">
+    <div class="recruit-section-title">船员招募</div>
+    <div class="recruit-count" id="recruitCount">0 个职位</div>
+  </div>
+  <div class="recruit-grid" id="recruitGrid"></div>
+  <div class="recruit-empty-state" id="recruitEmptyState">
+    <svg class="recruit-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+    <h3>暂无招聘信息</h3>
+    <p>暂时没有发布的船员招募职位，请稍后再来</p>
+  </div>
+</section>
+
+<!-- Filter --><!-- Filter -->
 <div class="filter-bar">
   <div class="filter-tags" id="filterTags"><button class="filter-tag active" data-filter="all">全部课程</button></div>
   <div class="search-box">
@@ -553,7 +733,50 @@
   </div>
 </div>
 
-<!-- Admin Panel -->
+<!-- Recruitment Apply Modal -->
+<div class="recruit-modal-overlay" id="recruitModal">
+  <div class="recruit-modal">
+    <div id="recruitFormView">
+      <div class="recruit-modal-header">
+        <button class="recruit-modal-close" onclick="closeRecruitModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        <div class="recruit-modal-label">船员招募</div>
+        <div class="recruit-modal-ship" id="recruitModalShipName">—</div>
+      </div>
+      <div class="recruit-modal-divider">
+        <div class="recruit-modal-divider-line"></div>
+        <svg class="modal-divider-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L8 6H4l4 4-4 4h4l4 4 4-4h4l-4-4 4-4h-4L12 2z"/></svg>
+        <div class="recruit-modal-divider-line"></div>
+      </div>
+      <div class="recruit-modal-body">
+        <form id="recruitApplyForm" novalidate>
+          <div class="recruit-form-grid">
+            <div class="recruit-form-group"><label class="recruit-form-label">姓名 <span>*</span></label><input class="recruit-form-input" type="text" id="rName" placeholder="请输入真实姓名" /></div>
+            <div class="recruit-form-group"><label class="recruit-form-label">身份证号 <span>*</span></label><input class="recruit-form-input" type="text" id="rIdCard" placeholder="18位身份证号码" maxlength="18" /></div>
+            <div class="recruit-form-group"><label class="recruit-form-label">手机号码 <span>*</span></label><input class="recruit-form-input" type="tel" id="rPhone" placeholder="11位手机号" /></div>
+            <div class="recruit-form-group"><label class="recruit-form-label">应聘职务 <span>*</span></label><select class="recruit-form-input" id="rTitle"><option value="">请选择职务</option><option>船长</option><option>大副</option><option>二副</option><option>三副</option><option>轮机长</option><option>大管轮</option><option>二管轮</option><option>三管轮</option><option>水手长</option><option>水手</option><option>机工</option><option>大厨</option><option>其他</option></select></div>
+            <div class="recruit-form-group full"><label class="recruit-form-label">工作经历简介</label><textarea class="recruit-form-input" id="rExperience" placeholder="请简要介绍您的工作经历（如曾在哪些船舶、担任什么职务等）" rows="3"></textarea></div>
+          </div>
+          <button type="submit" class="recruit-submit"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>提交申请</button>
+        </form>
+      </div>
+    </div>
+    <div class="recruit-success-screen" id="recruitSuccessScreen">
+      <div class="recruit-success-icon-wrap"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2ECC71" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <div class="recruit-success-title">申请已提交！</div>
+      <div class="recruit-success-desc">您的船员申请已提交，航运公司将尽快与您联系确认面试安排。</div>
+      <div class="recruit-success-ticket">
+        <div class="recruit-success-ticket-label">申请确认编号</div>
+        <div class="recruit-success-ticket-code" id="rTicketCode">—</div>
+        <div class="recruit-success-ticket-row"><span>应聘船舶</span><span id="rTicketShip">—</span></div>
+        <div class="recruit-success-ticket-row"><span>应聘职务</span><span id="rTicketTitle">—</span></div>
+        <div class="recruit-success-ticket-row"><span>申请时间</span><span id="rTicketTime">—</span></div>
+      </div>
+      <button class="recruit-success-close-btn" onclick="closeRecruitModal()">完成</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel --><!-- Admin Panel -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-panel">
     <div class="admin-topbar">
@@ -568,6 +791,7 @@
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="courses" onclick="switchAdminTab('courses')">📚 课程管理</button>
         <button class="admin-tab" data-tab="orders" onclick="switchAdminTab('orders')">📋 订单管理</button>
+        <button class="admin-tab" data-tab="recruit" onclick="switchAdminTab('recruit')">⚓ 船员招募</button>
         <button class="admin-tab" data-tab="settings" onclick="switchAdminTab('settings')">⚙️ 全局设置</button>
       </div>
 
@@ -1025,9 +1249,11 @@ function switchAdminTab(tab) {
   document.getElementById('orderListView').style.display = tab === 'orders' ? 'block' : 'none';
   document.getElementById('orderDetailView').style.display = 'none';
   document.getElementById('settingsView').style.display = tab === 'settings' ? 'block' : 'none';
+  document.getElementById('adminRecruitView').style.display = tab === 'recruit' ? 'block' : 'none';
   if (tab === 'orders') renderOrders();
   if (tab === 'courses') renderAdminList();
   if (tab === 'settings') loadGlobalSettings();
+  if (tab === 'recruit') switchRecruitAdminView('list');
 }
 
 function loadOrders() {
@@ -1308,6 +1534,476 @@ function deleteOrder(idx) {
   // Update order count
   document.getElementById('orderCount').textContent = orders.length;
 }
+
+
+
+/* ══════════════════════════════════════════════════════ */
+/* ─── SHIP RECRUITMENT MODULE ─── */
+/* ══════════════════════════════════════════════════════ */
+
+/* Default Recruitment Data */
+const DEFAULT_RECRUITS = [
+  {
+    id: 1,
+    shipName: '海盛号 MV HAISHENG',
+    shipType: '散货船',
+    route: '远洋航线 / 东南亚',
+    salary: '15000-22000',
+    duration: '6个月',
+    urgent: true,
+    desc: '诚聘有经验船员，需持有有效适任证书，航线稳定，福利完善。',
+    requirement: '持有海船船员适任证书，有远洋航行经验者优先。',
+  },
+  {
+    id: 2,
+    shipName: '华通号 MV HUATONG',
+    shipType: '集装箱船',
+    route: '近洋航线 / 日韩线',
+    salary: '12000-18000',
+    duration: '4个月',
+    urgent: false,
+    desc: '日韩固定航线，港口条件好，船舶设备先进，招募多个岗位。',
+    requirement: '有日韩航线经验者优先，公司提供专业培训。',
+  },
+  {
+    id: 3,
+    shipName: '蓝海号 MV LANHAI',
+    shipType: '油轮',
+    route: '沿海 / 化工品运输',
+    salary: '18000-25000',
+    duration: '6个月',
+    urgent: false,
+    desc: '高薪油轮岗位，有毒化物操作证书优先，提供专业安全培训。',
+    requirement: '需持有油轮操作证书，有化学品船经验优先。',
+  },
+];
+
+/* Storage Keys */
+const RECRUIT_KEY = 'crew_training_recruits';
+const APPLY_KEY = 'crew_training_applications';
+
+/* Load & Save */
+function loadRecruits() {
+  try {
+    const raw = localStorage.getItem(RECRUIT_KEY);
+    if (!raw) { saveRecruits(DEFAULT_RECRUITS); return [...DEFAULT_RECRUITS]; }
+    return JSON.parse(raw);
+  } catch(e) { return [...DEFAULT_RECRUITS]; }
+}
+
+function saveRecruits(data) {
+  localStorage.setItem(RECRUIT_KEY, JSON.stringify(data));
+}
+
+function loadApplications() {
+  try { return JSON.parse(localStorage.getItem(APPLY_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function saveApplications(data) {
+  localStorage.setItem(APPLY_KEY, JSON.stringify(data));
+}
+
+let RECRUITS = loadRecruits();
+let currentMainTab = 'courses';
+let currentRecruitId = null;
+
+/* Main Tab Switch */
+function switchMainTab(tab) {
+  currentMainTab = tab;
+  document.getElementById('tabCourses').classList.toggle('active', tab === 'courses');
+  document.getElementById('tabRecruit').classList.toggle('active', tab === 'recruit');
+  
+  const courseSection = document.querySelector('.courses-section');
+  const filterBar = document.querySelector('.filter-bar');
+  const heroTabs = document.querySelector('.main-tabs');
+  
+  if (tab === 'recruit') {
+    // Hide courses
+    if (courseSection) courseSection.style.display = 'none';
+    if (filterBar) filterBar.style.display = 'none';
+    // Show recruitment
+    document.getElementById('recruitSection').classList.add('show');
+    renderRecruits();
+  } else {
+    // Show courses
+    if (courseSection) courseSection.style.display = 'block';
+    if (filterBar) filterBar.style.display = 'flex';
+    // Hide recruitment
+    document.getElementById('recruitSection').classList.remove('show');
+  }
+}
+
+/* Render Recruitment Cards */
+function renderRecruits() {
+  const grid = document.getElementById('recruitGrid');
+  const empty = document.getElementById('recruitEmptyState');
+  const countEl = document.getElementById('recruitCount');
+  countEl.textContent = RECRUITS.length + ' 个职位';
+  
+  if (!RECRUITS.length) {
+    grid.innerHTML = '';
+    empty.classList.add('show');
+    return;
+  }
+  empty.classList.remove('show');
+  
+  grid.innerHTML = RECRUITS.map((r, i) => {
+    const badgeClass = r.urgent ? 'urgent' : 'normal';
+    const badgeText = r.urgent ? '紧急招聘' : '正在招聘';
+    return `<div class="recruit-card" data-id="${r.id}" style="animation-delay:${i*80}ms">
+      <div class="recruit-card-stripe"></div>
+      <div class="recruit-card-body">
+        <div class="recruit-card-top">
+          <div class="recruit-ship-name">${r.shipName}</div>
+          <span class="recruit-badge ${badgeClass}">${badgeText}</span>
+        </div>
+        <div class="recruit-meta">
+          <span class="recruit-meta-tag">${r.shipType}</span>
+          <span class="recruit-meta-tag">${r.route}</span>
+        </div>
+        <p class="recruit-desc">${r.desc}</p>
+        <div class="recruit-divider"></div>
+        <div class="recruit-row">
+          <span class="recruit-row-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>合同期</span>
+          <span class="recruit-row-value">${r.duration}</span>
+        </div>
+        <div class="recruit-row">
+          <span class="recruit-row-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>薪资</span>
+          <span class="recruit-row-value recruit-salary">¥${r.salary}</span>
+        </div>
+      </div>
+      <div class="card-footer" style="padding:0 20px 16px">
+        <button class="recruit-apply-btn" onclick="openRecruitModal(${r.id})">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          立即申请
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+  
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.recruit-card').forEach((card, idx) =>
+      setTimeout(() => card.classList.add('visible'), idx * 80));
+  });
+}
+
+/* Recruit Modal */
+function openRecruitModal(id) {
+  const r = RECRUITS.find(x => x.id === id);
+  if (!r) return;
+  currentRecruitId = id;
+  document.getElementById('recruitModalShipName').textContent = r.shipName + ' - ' + r.shipType;
+  document.getElementById('recruitFormView').style.display = 'block';
+  document.getElementById('recruitSuccessScreen').classList.remove('show');
+  document.getElementById('recruitApplyForm').reset();
+  document.querySelectorAll('.recruit-form-group').forEach(g => g.classList.remove('has-error'));
+  document.getElementById('recruitModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRecruitModal() {
+  document.getElementById('recruitModal').classList.remove('open');
+  document.body.style.overflow = '';
+  currentRecruitId = null;
+}
+
+document.getElementById('recruitModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeRecruitModal();
+});
+
+/* Recruit Form Validation */
+const recruitValidators = {
+  rName: v => v.trim().length >= 2,
+  rIdCard: v => /^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$/.test(v.trim()),
+  rPhone: v => /^1[3-9]\d{9}$/.test(v.trim()),
+  rTitle: v => v.trim() !== '',
+};
+
+function validateRecruitField(id) {
+  const input = document.getElementById(id);
+  const group = input.closest('.recruit-form-group');
+  const ok = recruitValidators[id] ? recruitValidators[id](input.value) : true;
+  group.classList.toggle('has-error', !ok);
+  input.classList.toggle('error', !ok);
+  return ok;
+}
+
+document.querySelectorAll('#recruitApplyForm .recruit-form-input').forEach(input => {
+  input.addEventListener('blur', () => validateRecruitField(input.id));
+  input.addEventListener('input', () => {
+    if (input.closest('.recruit-form-group').classList.contains('has-error'))
+      validateRecruitField(input.id);
+  });
+});
+
+document.getElementById('recruitApplyForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const fields = ['rName', 'rIdCard', 'rPhone', 'rTitle'];
+  if (!fields.map(id => validateRecruitField(id)).every(Boolean)) {
+    const firstErr = document.querySelector('.recruit-form-group.has-error .recruit-form-input');
+    if (firstErr) {
+      firstErr.classList.add('shake');
+      firstErr.focus();
+      setTimeout(() => firstErr.classList.remove('shake'), 500);
+    }
+    return;
+  }
+
+  const r = RECRUITS.find(x => x.id === currentRecruitId);
+  const ticketCode = 'RC' + String(Math.floor(Math.random() * 900000) + 100000);
+  const now = new Date();
+  const timeStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+  const app = {
+    ticketCode,
+    shipName: r.shipName,
+    shipType: r.shipType,
+    position: document.getElementById('rTitle').value.trim(),
+    name: document.getElementById('rName').value.trim(),
+    idCard: document.getElementById('rIdCard').value.trim(),
+    phone: document.getElementById('rPhone').value.trim(),
+    experience: document.getElementById('rExperience').value.trim(),
+    time: timeStr,
+    status: 'pending',
+  };
+
+  const apps = loadApplications();
+  apps.push(app);
+  saveApplications(apps);
+
+  document.getElementById('rTicketCode').textContent = ticketCode;
+  document.getElementById('rTicketShip').textContent = r.shipName;
+  document.getElementById('rTicketTitle').textContent = document.getElementById('rTitle').value;
+  document.getElementById('rTicketTime').textContent = timeStr;
+  document.getElementById('recruitFormView').style.display = 'none';
+  document.getElementById('recruitSuccessScreen').classList.add('show');
+
+  toast('船员申请已提交！船东将尽快与您联系', 'success');
+});
+
+/* Admin Recruit Tab State */
+let recruitViewState = 'list'; // list | form | confirm | apps | app-detail
+let editingRecruitId = null;
+let deletingRecruitId = null;
+let viewingAppIdx = null;
+
+function switchRecruitAdminView(view) {
+  recruitViewState = view;
+  document.getElementById('adminRecruitList').style.display = view === 'list' ? 'block' : 'none';
+  document.getElementById('adminRecruitForm').classList.toggle('show', view === 'form');
+  document.getElementById('adminRecruitConfirm').classList.toggle('show', view === 'confirm');
+  document.getElementById('adminAppsView').style.display = view === 'apps' ? 'block' : 'none';
+  document.getElementById('adminAppDetailView').style.display = view === 'app-detail' ? 'block' : 'none';
+  if (view === 'list') renderAdminRecruitList();
+  if (view === 'apps') renderAdminApplications();
+}
+
+function renderAdminRecruitList() {
+  const list = document.getElementById('adminRecruitListItems');
+  document.getElementById('adminRecruitCount').textContent = RECRUITS.length;
+  if (!RECRUITS.length) {
+    list.innerHTML = '<div class="admin-recruit-empty">暂无招聘信息，点击"新增职位"添加</div>';
+    return;
+  }
+  list.innerHTML = RECRUITS.map(r => `
+    <div class="admin-recruit-item">
+      <div class="admin-recruit-stripe" style="background:${r.urgent ? '#E74C3C' : '#2ECC71'}"></div>
+      <div class="admin-recruit-info">
+        <div class="admin-recruit-name">${r.shipName} <span style="font-size:11px;color:var(--slate)">(${r.shipType})</span></div>
+        <div class="admin-recruit-meta">
+          <span>${r.route}</span>
+          <span style="color:var(--brass)">¥${r.salary}</span>
+          <span>${r.duration}</span>
+          ${r.urgent ? '<span style="color:#E74C3C">紧急</span>' : ''}
+        </div>
+      </div>
+      <div class="admin-recruit-actions">
+        <button class="admin-action-btn" title="编辑" onclick="showRecruitEditForm(${r.id})">&#9998;</button>
+        <button class="admin-action-btn delete" title="删除" onclick="showRecruitDeleteConfirm(${r.id})">&#10005;</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showRecruitAddForm() {
+  editingRecruitId = null;
+  document.getElementById('adminRecruitFormTitle').textContent = '新增招募职位';
+  document.getElementById('rfShipName').value = '';
+  document.getElementById('rfShipType').value = '';
+  document.getElementById('rfRoute').value = '';
+  document.getElementById('rfSalary').value = '';
+  document.getElementById('rfDuration').value = '';
+  document.getElementById('rfUrgent').checked = false;
+  document.getElementById('rfDesc').value = '';
+  document.getElementById('rfRequirement').value = '';
+  switchRecruitAdminView('form');
+}
+
+function showRecruitEditForm(id) {
+  const r = RECRUITS.find(x => x.id === id);
+  if (!r) return;
+  editingRecruitId = id;
+  document.getElementById('adminRecruitFormTitle').textContent = '编辑招募职位';
+  document.getElementById('rfShipName').value = r.shipName;
+  document.getElementById('rfShipType').value = r.shipType;
+  document.getElementById('rfRoute').value = r.route;
+  document.getElementById('rfSalary').value = r.salary;
+  document.getElementById('rfDuration').value = r.duration;
+  document.getElementById('rfUrgent').checked = !!r.urgent;
+  document.getElementById('rfDesc').value = r.desc;
+  document.getElementById('rfRequirement').value = r.requirement || '';
+  switchRecruitAdminView('form');
+}
+
+function saveRecruit() {
+  const shipName = document.getElementById('rfShipName').value.trim();
+  const shipType = document.getElementById('rfShipType').value.trim();
+  const route = document.getElementById('rfRoute').value.trim();
+  const salary = document.getElementById('rfSalary').value.trim();
+  const duration = document.getElementById('rfDuration').value.trim();
+  const urgent = document.getElementById('rfUrgent').checked;
+  const desc = document.getElementById('rfDesc').value.trim();
+  const requirement = document.getElementById('rfRequirement').value.trim();
+
+  if (!shipName || !shipType || !route || !salary || !duration || !desc) {
+    toast('请填写所有必填项', 'error');
+    return;
+  }
+
+  if (editingRecruitId !== null) {
+    const idx = RECRUITS.findIndex(x => x.id === editingRecruitId);
+    if (idx >= 0) {
+      RECRUITS[idx] = { ...RECRUITS[idx], shipName, shipType, route, salary, duration, urgent, desc, requirement };
+    }
+    toast('招募职位已更新', 'success');
+  } else {
+    const newId = RECRUITS.length ? Math.max(...RECRUITS.map(r => r.id)) + 1 : 1;
+    RECRUITS.push({ id: newId, shipName, shipType, route, salary, duration, urgent, desc, requirement });
+    toast('招募职位已添加', 'success');
+  }
+
+  saveRecruits(RECRUITS);
+  if (currentMainTab === 'recruit') renderRecruits();
+  switchRecruitAdminView('list');
+}
+
+function showRecruitDeleteConfirm(id) {
+  const r = RECRUITS.find(x => x.id === id);
+  if (!r) return;
+  deletingRecruitId = id;
+  document.getElementById('recruitDeleteName').textContent = '即将删除「' + r.shipName + '」的招聘信息，此操作不可恢复';
+  switchRecruitAdminView('confirm');
+}
+
+function confirmRecruitDelete() {
+  RECRUITS = RECRUITS.filter(r => r.id !== deletingRecruitId);
+  saveRecruits(RECRUITS);
+  toast('招募职位已删除', 'info');
+  if (currentMainTab === 'recruit') renderRecruits();
+  switchRecruitAdminView('list');
+  deletingRecruitId = null;
+}
+
+/* Admin Applications */
+function renderAdminApplications() {
+  const apps = loadApplications();
+  const list = document.getElementById('adminAppList');
+  const empty = document.getElementById('adminAppEmpty');
+  document.getElementById('adminAppCount').textContent = apps.length;
+  
+  if (!apps.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  
+  list.innerHTML = apps.map((app, idx) => {
+    const avatar = app.name.charAt(0).toUpperCase();
+    const statusClass = app.status === 'reviewed' ? 'reviewed' : app.status === 'rejected' ? 'rejected' : 'pending';
+    const statusText = app.status === 'reviewed' ? '已录用' : app.status === 'rejected' ? '已拒绝' : '待审核';
+    return `<div class="admin-app-item" onclick="showAppDetail(${idx})">
+      <div class="admin-app-avatar">${avatar}</div>
+      <div class="admin-app-info">
+        <div class="admin-app-name">${app.name}</div>
+        <div class="admin-app-meta">
+          <span>${app.position}</span>
+          <span>${app.shipName}</span>
+          <span>${app.time}</span>
+        </div>
+      </div>
+      <div class="admin-app-right">
+        <span class="admin-app-status ${statusClass}">${statusText}</span>
+        <button class="admin-app-delete" onclick="event.stopPropagation();deleteApplication(${idx})" title="删除">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showAppDetail(idx) {
+  viewingAppIdx = idx;
+  const apps = loadApplications();
+  if (idx < 0 || idx >= apps.length) return;
+  const app = apps[idx];
+  
+  document.getElementById('adminAppDetailCard').innerHTML = `
+    <div class="admin-app-detail-row"><div class="admin-app-detail-label">申请人</div><div class="admin-app-detail-value">${app.name}</div></div>
+    <div class="admin-app-detail-row"><div class="admin-app-detail-label">身份证号</div><div class="admin-app-detail-value">${app.idCard}</div></div>
+    <div class="admin-app-detail-row"><div class="admin-app-detail-label">联系电话</div><div class="admin-app-detail-value">${app.phone}</div></div>
+    <div class="admin-app-detail-row"><div class="admin-app-detail-label">应聘职务</div><div class="admin-app-detail-value">${app.position}</div></div>
+    <div class="admin-app-detail-row"><div class="admin-app-detail-label">应聘船舶</div><div class="admin-app-detail-value">${app.shipName}</div></div>
+    <div class="admin-app-detail-row"><div class="admin-app-detail-label">申请时间</div><div class="admin-app-detail-value">${app.time}</div></div>
+    <div class="admin-app-detail-row"><div class="admin-app-detail-label">申请编号</div><div class="admin-app-detail-value" style="color:var(--brass)">${app.ticketCode}</div></div>
+    <div class="admin-app-detail-row"><div class="admin-app-detail-label">审核状态</div><div class="admin-app-detail-value" style="color:${app.status === 'reviewed' ? 'var(--sea-foam)' : app.status === 'rejected' ? 'var(--coral)' : '#F39C12'}">${app.status === 'reviewed' ? '已录用' : app.status === 'rejected' ? '已拒绝' : '待审核'}</div></div>
+    ${app.experience ? '<div class="admin-app-detail-row" style="flex-direction:column;align-items:flex-start;gap:4px"><div class="admin-app-detail-label">工作经历</div><div class="admin-app-detail-value" style="color:var(--ivory);font-family:DM Sans;font-weight:400;white-space:pre-wrap">'+app.experience+'</div></div>' : ''}
+  `;
+  
+  const actionsRow = document.getElementById('adminAppActionsRow');
+  if (app.status === 'pending') {
+    actionsRow.innerHTML = `
+      <button class="admin-app-action-btn back" onclick="switchRecruitAdminView('apps')">返回列表</button>
+      <button class="admin-app-action-btn reject" onclick="rejectApplication(${idx})">拒绝</button>
+      <button class="admin-app-action-btn accept" onclick="acceptApplication(${idx})">录用</button>
+    `;
+  } else {
+    actionsRow.innerHTML = `
+      <button class="admin-app-action-btn back" onclick="switchRecruitAdminView('apps')">返回列表</button>
+    `;
+  }
+  
+  switchRecruitAdminView('app-detail');
+}
+
+function acceptApplication(idx) {
+  const apps = loadApplications();
+  if (idx < 0 || idx >= apps.length) return;
+  apps[idx].status = 'reviewed';
+  saveApplications(apps);
+  toast('已标记为录用', 'success');
+  showAppDetail(idx);
+}
+
+function rejectApplication(idx) {
+  const apps = loadApplications();
+  if (idx < 0 || idx >= apps.length) return;
+  apps[idx].status = 'rejected';
+  saveApplications(apps);
+  toast('已拒绝该申请', 'info');
+  showAppDetail(idx);
+}
+
+function deleteApplication(idx) {
+  if (!confirm('确定要删除这条申请记录吗？')) return;
+  const apps = loadApplications();
+  apps.splice(idx, 1);
+  saveApplications(apps);
+  toast('申请记录已删除', 'info');
+  renderAdminApplications();
+}
+
 
 /* ═══ Init ═══ */
 /* PWA: Register Service Worker */
