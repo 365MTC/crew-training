@@ -1,7 +1,7 @@
-const CACHE_NAME = 'crew-training-v1';
+const CACHE_NAME = 'crew-training-v2';
 const ASSETS = [
-  '/index.html',
-  '/manifest.json'
+  './index.html',
+  './manifest.json'
 ];
 
 // Install
