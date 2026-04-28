@@ -1,25 +1,18 @@
 {
   "name": "船员培训课程报名",
-  "short_name": "船员培训",
+  "short_name": "船员培训", 
   "description": "海洋船员培训课程在线报名与管理平台",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "https://365mtc.github.io/crew-training/",
+  "scope": "https://365mtc.github.io/crew-training/",
   "display": "standalone",
   "background_color": "#0B1929",
   "theme_color": "#0B1929",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230B1929'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='260' fill='%23C8A951'>⚓</text></svg>",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230B1929'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='100' fill='%23C8A951'>⚓</text></svg>",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "https://365mtc.github.io/crew-training/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
   "categories": ["education", "business"],
