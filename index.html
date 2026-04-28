@@ -339,6 +339,29 @@
     .admin-pwd-btn.cancel:hover{border-color:var(--brass);color:var(--brass)}
     .admin-pwd-btn.confirm{background:var(--brass);border:none;color:var(--navy-deep)}
     .admin-pwd-btn.confirm:hover{background:var(--brass-light)}
+
+    /* Payment QR Code Modal */
+    .pay-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:10002;display:none;align-items:center;justify-content:center}
+    .pay-modal-overlay.show{display:flex}
+    .pay-modal{background:var(--navy);border:1px solid rgba(200,169,81,0.3);border-radius:var(--radius-lg);padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:var(--shadow-float);animation:modalIn 0.3s ease}
+    .pay-modal h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--ivory);margin-bottom:8px}
+    .pay-modal-subtitle{font-size:14px;color:var(--slate);margin-bottom:24px}
+    .pay-qr-wrap{width:220px;height:220px;margin:0 auto 20px;background:var(--white);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .pay-qr-wrap img{width:100%;height:100%;object-fit:contain}
+    .pay-qr-placeholder{font-size:80px;color:#07C160}
+    .pay-info{background:rgba(200,169,81,0.1);border:1px solid rgba(200,169,81,0.2);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;text-align:left}
+    .pay-info-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+    .pay-info-row:last-child{margin-bottom:0}
+    .pay-info-label{color:var(--slate)}
+    .pay-info-value{color:var(--ivory);font-weight:600}
+    .pay-info-value.price{color:var(--brass);font-size:18px}
+    .pay-tip{font-size:13px;color:var(--slate);margin-bottom:20px;line-height:1.6}
+    .pay-modal-btns{display:flex;gap:10px}
+    .pay-modal-btn{flex:1;padding:12px;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition)}
+    .pay-modal-btn.primary{background:#07C160;border:none;color:#fff}
+    .pay-modal-btn.primary:hover{background:#06AD56}
+    .pay-modal-btn.secondary{background:transparent;border:1px solid rgba(200,169,81,0.3);color:var(--slate)}
+    .pay-modal-btn.secondary:hover{border-color:var(--brass);color:var(--brass)}
   </style>
 </head>
 <body>
@@ -408,6 +431,27 @@
     <div class="admin-pwd-btns">
       <button class="admin-pwd-btn cancel" onclick="closeAdminPwdModal()">取消</button>
       <button class="admin-pwd-btn confirm" onclick="checkAdminPwd()">确认</button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment QR Code Modal -->
+<div class="pay-modal-overlay" id="payModal">
+  <div class="pay-modal">
+    <h3>💳 扫码付款</h3>
+    <div class="pay-modal-subtitle" id="payModalSubtitle">请使用微信扫码完成支付</div>
+    <div class="pay-qr-wrap" id="payQrWrap">
+      <div class="pay-qr-placeholder" id="payQrPlaceholder">💬</div>
+    </div>
+    <div class="pay-info" id="payInfo">
+      <div class="pay-info-row"><span class="pay-info-label">课程名称</span><span class="pay-info-value" id="payCourseName">—</span></div>
+      <div class="pay-info-row"><span class="pay-info-label">培训费用</span><span class="pay-info-value price" id="payPrice">¥0</span></div>
+      <div class="pay-info-row"><span class="pay-info-label">报名编号</span><span class="pay-info-value" id="payOrderId">—</span></div>
+    </div>
+    <div class="pay-tip">付款完成后，请保留支付凭证。我们将在 1-2 个工作日内确认您的报名信息。</div>
+    <div class="pay-modal-btns">
+      <button class="pay-modal-btn secondary" onclick="closePayModal()">我已付款</button>
+      <button class="pay-modal-btn primary" onclick="closePayModal()">完成</button>
     </div>
   </div>
 </div>
@@ -539,6 +583,7 @@
           <div class="admin-form-group"><label class="admin-label">标识颜色</label><input class="admin-input" type="color" id="afStripe" value="#C8A951" style="height:42px;padding:4px;cursor:pointer;" /></div>
           <div class="admin-form-group"><div style="height:100%;display:flex;align-items:flex-end"><label class="admin-checkbox-label"><input type="checkbox" id="afFull" />名额已满（暂停报名）</label></div></div>
           <div class="admin-form-group full"><label class="admin-label">课程描述 <span>*</span></label><textarea class="admin-input" id="afDesc" placeholder="请输入课程详细描述…" rows="3"></textarea></div>
+          <div class="admin-form-group full"><label class="admin-label">微信收款码 <span style="color:var(--slate);font-weight:400">(可选)</span></label><input class="admin-input" type="text" id="afPayQrCode" placeholder="收款码图片链接，如：https://xxx.com/qrcode.jpg" /><div style="font-size:11px;color:var(--slate);margin-top:4px">用户报名成功后将显示此收款码供扫码付款</div></div>
         </div>
         <button class="admin-save-btn" onclick="saveCourse()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>保存课程</button>
       </div>
@@ -744,7 +789,36 @@ document.getElementById('applyForm').addEventListener('submit', e => {
   document.getElementById('ticketTime').textContent = timeStr;
   document.getElementById('applyFormView').style.display = 'none';
   document.getElementById('successScreen').classList.add('show');
+  
+  // Show payment QR code if course has one
+  if (course.payQrCode) {
+    setTimeout(() => {
+      showPayModal(course, ticketCode);
+    }, 500);
+  }
 });
+
+/* ═══ Payment Modal ═══ */
+function showPayModal(course, ticketCode) {
+  document.getElementById('payCourseName').textContent = course.name;
+  document.getElementById('payPrice').textContent = '¥' + (course.price || 0);
+  document.getElementById('payOrderId').textContent = ticketCode;
+  
+  const qrWrap = document.getElementById('payQrWrap');
+  const placeholder = document.getElementById('payQrPlaceholder');
+  
+  if (course.payQrCode) {
+    qrWrap.innerHTML = `<img src="${course.payQrCode}" alt="收款码" onerror="this.parentElement.innerHTML='<div class=\\'pay-qr-placeholder\\'>💬</div>'" />`;
+  } else {
+    qrWrap.innerHTML = '<div class="pay-qr-placeholder">💬</div>';
+  }
+  
+  document.getElementById('payModal').classList.add('show');
+}
+
+function closePayModal() {
+  document.getElementById('payModal').classList.remove('show');
+}
 
 /* ═══════════════════════════════════════════ */
 /* ═══ ADMIN PANEL ═══ */
@@ -833,6 +907,7 @@ function showAddForm() {
   document.getElementById('afStripe').value = '#C8A951';
   document.getElementById('afFull').checked = false;
   document.getElementById('afDesc').value = '';
+  document.getElementById('afPayQrCode').value = '';
   showView(false, true, false);
 }
 
@@ -849,6 +924,7 @@ function showEditForm(id) {
   document.getElementById('afStripe').value = c.stripe || '#C8A951';
   document.getElementById('afFull').checked = !!c.full;
   document.getElementById('afDesc').value = c.desc;
+  document.getElementById('afPayQrCode').value = c.payQrCode || '';
   showView(false, true, false);
 }
 
@@ -862,6 +938,7 @@ function saveCourse() {
   const stripe = document.getElementById('afStripe').value;
   const full = document.getElementById('afFull').checked;
   const desc = document.getElementById('afDesc').value.trim();
+  const payQrCode = document.getElementById('afPayQrCode').value.trim();
 
   if (!name || !category || !duration || isNaN(price) || !desc) {
     toast('请填写所有必填项', 'error');
@@ -870,10 +947,10 @@ function saveCourse() {
 
   if (editingId !== null) {
     const idx = COURSES.findIndex(c=>c.id===editingId);
-    if (idx >= 0) { COURSES[idx] = { ...COURSES[idx], name, category, duration, difficulty, price, enrolled, stripe, full, desc }; }
+    if (idx >= 0) { COURSES[idx] = { ...COURSES[idx], name, category, duration, difficulty, price, enrolled, stripe, full, desc, payQrCode }; }
     toast('课程已更新', 'success');
   } else {
-    COURSES.push({ id: nextId(), name, category, duration, difficulty, price, enrolled, stripe, full, desc });
+    COURSES.push({ id: nextId(), name, category, duration, difficulty, price, enrolled, stripe, full, desc, payQrCode });
     toast('课程已添加', 'success');
   }
   saveCourses(COURSES);
