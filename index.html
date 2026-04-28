@@ -2377,13 +2377,14 @@ const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
 // Only show install banner on mobile devices
 if (isMobile && !sessionStorage.getItem('installDismissed')) {
   installBanner.style.display = 'flex';
-  document.getElementById('installAppBtn').style.display = 'block';
   if (isWeChat) {
     // WeChat: show "open in browser" button
     const openBtn = document.getElementById('installAppBtn');
+    openBtn.style.display = 'block';
     openBtn.textContent = '在浏览器打开';
     openBtn.style.background = '#1890ff';
   }
+  // 非微信：初始隐藏按钮，等 beforeinstallprompt 触发后再显示
 } else {
   // Desktop: hide banner completely
   if (installBanner) installBanner.style.display = 'none';
@@ -2391,8 +2392,10 @@ if (isMobile && !sessionStorage.getItem('installDismissed')) {
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
+  // PWA 可安装，显示安装按钮
   const openBtn = document.getElementById('installAppBtn');
   if (openBtn) {
+    openBtn.style.display = 'block';
     openBtn.textContent = '立即安装';
     openBtn.style.background = '#07C160';
   }
